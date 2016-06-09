@@ -1,0 +1,1409 @@
+unit OrganismEdit;
+
+{ Organism names are a list of names associated with the organism, so they can be
+  handled as a group before saving to disk (allows change of name numbers).
+  Refs and finds are modified directly on the disk.
+}
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, IMSData, StdCtrls, Grids, DBGrids, DB, ExtCtrls, DBCtrls,
+  IB_Grid, DateUtils, ComCtrls, OrganismConcepts, BookConcepts, Books,
+    Generics.Collections, IB_Access, IB_Components, ForayConcepts, Mask,
+  IBC_CustomLabel, IBC_Label, IB_Controls, IB_EditButton,
+  Math, Generics.Defaults;
+
+type
+  TOrganismEditForm = class(TForm)
+    EditPages: TPageControl;
+    NameTab: TTabSheet;
+    RefTab: TTabSheet;
+    FindTab: TTabSheet;
+    DistribTab: TTabSheet;
+    OrgDataPanel: TPanel;
+    OrgCodeText: TIB_Text;
+    PrefName: TIB_Label;
+    Label5: TLabel;
+    CardMemo: TIB_Memo;
+    Comments: TIB_Memo;
+    ConfirmDeleteButton: TButton;
+    SaveOrgButton: TButton;
+    CancelOrgButton: TButton;
+    WarnImage: TImage;
+    EPPTInfo: TLabel;
+    RefPanel: TPanel;
+    Label10: TLabel;
+    RefDispList: TListView;
+    NewRefButton: TButton;
+    Label23: TLabel;
+    RefCountDisp: TLabel;
+    EditRefPanel: TPanel;
+    Label21: TLabel;
+    Label22: TLabel;
+    Label13: TLabel;
+    SaveRefButton: TButton;
+    CancelRefButton: TButton;
+    DeleteRefButton: TButton;
+    EditRefNotes: TIB_Memo;
+    EditRefPageno: TIB_Edit;
+    EditRefVolume: TIB_Edit;
+    EditRefBookCode: TIB_Edit;
+    ImportBookButton: TButton;
+    FindPanel: TPanel;
+    DistPanel: TPanel;
+    NamePanel: TPanel;
+    NameCountDisp: TLabel;
+    Label11: TLabel;
+    NameDispList: TListView;
+    EditNamePanel: TPanel;
+    Label16: TLabel;
+    Label19: TLabel;
+    Label17: TLabel;
+    Label6: TLabel;
+    SaveNameButton: TButton;
+    CancelNameButton: TButton;
+    ImportNameButton: TButton;
+    DeleteNameButton: TButton;
+    NewNameButton: TButton;
+    FindCountDisp: TLabel;
+    Label9: TLabel;
+    FindDispList: TListView;
+    EditFindPanel: TPanel;
+    Label4: TLabel;
+    Label12: TLabel;
+    EditForayCode: TIB_Edit;
+    SaveFindButton: TButton;
+    FindForayButton: TButton;
+    CancelFindButton: TButton;
+    DeleteFindButton: TButton;
+    EditFindNotes: TIB_Memo;
+    NewFindButton: TButton;
+    DistributionPanel: TPanel;
+    FormGB: TGroupBox;
+    Label1: TLabel;
+    EPPTCode: TLabel;
+    EPPTName: TLabel;
+    PreferredCB: TCheckBox;
+    Label2: TLabel;
+    ViewEPPTNameButton: TButton;
+    NewOrgPanel: TPanel;
+    OrgCodeOKButton: TButton;
+    Polno: TIB_Edit;
+    Label3: TLabel;
+    FamilyCode: TIB_Edit;
+    Label7: TLabel;
+    EditNameFullName: TEdit;
+    EditNameAuthority: TEdit;
+    EditNameComments: TMemo;
+    Label8: TLabel;
+    EditUsePanel: TPanel;
+    AcceptUseButton: TButton;
+    InsertUseButton: TButton;
+    LanguageLB: TComboBox;
+    Label14: TLabel;
+    Label15: TLabel;
+    OrgDataSource: TIB_DataSource;
+    CodeChangeButton: TButton;
+    CancelCodeButton: TButton;
+    CloseButton: TButton;
+    UsesDisplay: TLabel;
+    EditDistPanel: TPanel;
+    Label18: TLabel;
+    Label20: TLabel;
+    Label24: TLabel;
+    Label25: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Button3: TButton;
+    IB_Memo1: TIB_Memo;
+    IB_Edit1: TIB_Edit;
+    IB_Edit2: TIB_Edit;
+    IB_Edit3: TIB_Edit;
+    Button4: TButton;
+    RefDataSource: TIB_DataSource;
+    NameTransferPanel: TPanel;
+    NameTransferButton: TButton;
+    NameTransferCode: TEdit;
+    EPPTLabel: TLabel;
+    Label27: TLabel;
+    Label28: TLabel;
+    FindDataSource: TIB_DataSource;
+    RefTransferPanel: TPanel;
+    RefTransferButton: TButton;
+    RefTransferCode: TEdit;
+    CancelUseButton: TButton;
+    NewOrgCode: TEdit;
+    procedure FormActivate(Sender: TObject);
+    procedure CloseButtonClick(Sender: TObject);
+    procedure BrowseBooksButtonClick(Sender: TObject);
+    procedure FindForayButtonClick(Sender: TObject);
+    procedure NewNameButtonClick(Sender: TObject);
+    procedure DeleteNameButtonClick(Sender: TObject);
+    procedure SaveNameButtonClick(Sender: TObject);
+    procedure ConfirmDeleteButtonClick(Sender: TObject);
+    procedure NewRefButtonClick(Sender: TObject);
+    procedure NewFindButtonClick(Sender: TObject);
+//    procedure EditRefButtonClick(Sender: TObject);
+//    procedure EditFindButtonClick(Sender: TObject);
+    procedure CancelNameButtonClick(Sender: TObject);
+    procedure CancelRefButtonClick(Sender: TObject);
+    procedure CancelFindButtonClick(Sender: TObject);
+    procedure DeleteRefButtonClick(Sender: TObject);
+    procedure DeleteFindButtonClick(Sender: TObject);
+    procedure SaveFindButtonClick(Sender: TObject);
+    procedure ImportNameButtonClick(Sender: TObject);
+    procedure SaveRefButtonClick(Sender: TObject);
+    procedure OrgCodeOKButtonClick(Sender: TObject);
+    procedure SaveOrgButtonClick(Sender: TObject);
+    procedure CancelOrgButtonClick(Sender: TObject);
+    procedure CardMemoChange(Sender: TObject);
+    procedure CommentsChange(Sender: TObject);
+    procedure ImportBookButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure NameDispListClick(Sender: TObject);
+    procedure RefDispListClick(Sender: TObject);
+    procedure FindDispListClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FamilyCodeChange(Sender: TObject);
+    procedure PolnoChange(Sender: TObject);
+    procedure AcceptUseButtonClick(Sender: TObject);
+    procedure InsertUseButtonClick(Sender: TObject);
+    procedure NameDispListCompare(Sender: TObject; Item1, Item2: TListItem;
+      Data: Integer; var Compare: Integer);
+    procedure NameDispListCustomDrawItem(Sender: TCustomListView;
+      Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
+    procedure CodeChangeButtonClick(Sender: TObject);
+    procedure CancelCodeButtonClick(Sender: TObject);
+    procedure PreferredCBClick(Sender: TObject);
+    procedure EditPagesChanging(Sender: TObject; var AllowChange: Boolean);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure NameTransferButtonClick(Sender: TObject);
+    procedure RefTransferButtonClick(Sender: TObject);
+    procedure CancelUseButtonClick(Sender: TObject);
+    procedure NewOrgCodeExit(Sender: TObject);
+    procedure NewOrgPanelExit(Sender: TObject);
+  private
+    chckBoxArray: array of TCheckBox;
+    function AddNewDispFind(AFind: TFind): integer;
+    function AddNewDispName(AName: TOrgName): integer;
+    function AddNewDispRef(ARef: TPageRef): integer;
+    function GetFamilyCode(orgcode: ansistring): ansistring;
+    function SetConfDeleteButton:boolean;
+    function NameIsValid:boolean ;
+    procedure CreateEditUseCheckboxes;
+    procedure DisplayEPPTStatusInfo(orgcode: ansistring);
+    procedure DisplayOrgNames;
+    procedure DisplayRefs(RefQuery:TIB_Query;orgcode:ansistring);
+    procedure DisplayFinds(FindQuery:TIB_Query;orgcode:ansistring);
+    procedure FillEditUsePanel;
+    procedure FillNameDispList;
+    procedure FillNameFields(AName: TOrgName);
+    procedure GetDetails;
+    procedure LockOtherEditPanels;
+    procedure LockEditFindPanel;
+    procedure LockEditNamePanel;
+    procedure LockEditRefPanel;
+    procedure RecoverNameFields(AName:TOrgName);
+    procedure SetOrgButtonsOff;
+    procedure SetOrgButtonsOn;
+    procedure UnLockOtherEditPanels;
+    procedure UnLockEditFindPanel;
+    procedure UnLockEditNamePanel;
+    procedure UnLockEditRefPanel;
+    procedure UpdateFindCount;
+    procedure UpdateNameCount;
+    procedure UpdateRefCount;
+    { Déclarations privées }
+  public
+    NewNameID: integer;
+    orgUses:TOrgUses;
+    CurrentOrg: TOrganism;
+    Mode:smallInt;
+    NameInsertRequested:boolean;
+    PreferredNameChanged: boolean;
+    OrgQuery: TIB_Query;
+    NameQuery: TIB_Query;
+    RefQuery: TIB_Query;
+    FindQuery: TIB_Query;
+    { Déclarations publiques }
+  end;
+
+var
+  OrganismEditForm: TOrganismEditForm;
+
+implementation
+
+uses Forays, IMSMain, OrgNameReview;
+{$R *.dfm}
+
+
+procedure TOrganismEditForm.AcceptUseButtonClick(Sender: TObject);
+var i:integer; OldUsedBy:ansistring ;AUseCode:ansistring;
+begin
+    OldUsedBy:=CurrentOrg.UsedBy;
+    CurrentOrg.ClearUses;
+   //add each use which is checked using itsindex
+    for i := low(chckBoxArray) to high(chckBoxArray) do
+      if chckBoxArray[i].Checked then
+      begin
+        AUseCode:=OrgUses[i+1].UseCode;
+        CurrentOrg.AddUseCode(AUseCode);
+      end;
+    try
+      if OldUsedBy<>CurrentOrg.UsedBy then
+      begin
+        OrgQuery.FieldValues['USEDBY']:=CurrentOrg.Usedby;
+        UsesDisplay.Caption:='Uses: '+CurrentOrg.Usedby;
+      end;
+      SetOrgButtonsOn;
+    finally
+      EditUsePanel.Visible:=false;
+    end;
+end;
+
+
+function TOrganismEditForm.AddNewDispFind(AFind: TFind): integer;
+begin
+  with FindDispList.Items.Add do
+  begin
+    Caption := AFind.Foraycode;
+  end;
+  result := FindDispList.Items.Count - 1;
+end;
+
+function TOrganismEditForm.AddNewDispName(AName: TOrgName): integer;
+// Caption is name
+// subitem(0) is authority
+// subitem(1) is language
+// subitem(2) is preferred
+
+begin
+  with NameDispList.Items.Add do
+  begin
+    Caption := AName.fullname;
+    if AName.IsScientific then SubItems.Add(TScientificname(AName).Author) else SubItems.Add(' ');
+    if AName.LanguageName='' then AName.LanguageName:=IMSHomeForm.LanguageLookup.FindLanguageName(AName.LanguageCode);
+    SubItems.Add(AName.LanguageName);
+    if AName.IsScientific and TScientificName(AName).Preferred then SubItems.Add('P')
+    else SubItems.Add(' ');
+    Data:=AName;
+  end;
+  result := NameDispList.Items.Count - 1;
+end;
+
+function TOrganismEditForm.AddNewDispRef(ARef: TPageRef): integer;
+begin
+  with RefDispList.Items.Add do
+  begin
+    Caption := ARef.Bookcode;
+    SubItems.Add(ARef.volume);
+    if ARef.pageno>0 then SubItems.Add(IntToStr(ARef.pageno));//page number and ref occupy same column
+    if ARef.refcode<>'' then SubItems.Add(ARef.refcode);
+  end;
+  result := RefDispList.Items.Count - 1;
+end;
+
+procedure TOrganismEditForm.BrowseBooksButtonClick(Sender: TObject);
+begin
+  BooksForm.ShowModal;
+end;
+
+procedure TOrganismEditForm.CancelRefButtonClick(Sender: TObject);
+begin
+  if RefQuery.Modified then
+    RefQuery.Cancel;
+  UnLockEditRefPanel;
+end;
+
+procedure TOrganismEditForm.CancelUseButtonClick(Sender: TObject);
+begin
+    EditUsePanel.Visible:=false;
+end;
+
+procedure TOrganismEditForm.CardMemoChange(Sender: TObject);
+begin
+  SetOrgButtonsOn;
+end;
+
+procedure TOrganismEditForm.CancelCodeButtonClick(Sender: TObject);
+begin
+  NewOrgPanel.Visible:=false;
+end;
+
+procedure TOrganismEditForm.CancelFindButtonClick(Sender: TObject);
+begin
+  if FindQuery.Modified then
+    FindQuery.Cancel;
+  UnLockEditFindPanel;
+end;
+
+procedure TOrganismEditForm.CancelNameButtonClick(Sender: TObject);
+begin
+  UnLockEditNamePanel;
+end;
+
+procedure TOrganismEditForm.CancelOrgButtonClick(Sender: TObject);
+begin
+  if OrgQuery.NeedToPost then OrgQuery.Cancel;
+  CurrentOrg.Clear;
+  Close;
+end;
+
+procedure TOrganismEditForm.CloseButtonClick(Sender: TObject);
+var reply:integer;
+begin
+  if ConfirmDeleteButton.Visible=false  then close
+  else if MessageDlg('Cancel deletion of this organism?', mtConfirmation, [mbYes, mbNo], 0)
+    = mrYes then close;
+
+end;
+
+procedure TOrganismEditForm.CodeChangeButtonClick(Sender: TObject);
+begin
+  if OrgQuery.Modified then ShowMessage('Save your current changes before changing the code')
+  else begin
+    NewOrgPanel.Visible:=true;
+    NewOrgCode.SetFocus;
+  end;
+end;
+
+procedure TOrganismEditForm.CommentsChange(Sender: TObject);
+begin
+  SetOrgButtonsOn;
+end;
+
+procedure TOrganismEditForm.ConfirmDeleteButtonClick(Sender: TObject);
+begin
+  if MessageDlg('Delete this organism?', mtConfirmation, [mbYes, mbNo], 0)
+    = mrYes then
+  begin
+    CurrentOrg.WriteNamesToDataset(NameQuery);  //delete any remaining names
+    IMSDM.ExplicitDelete(OrgQuery);
+  end;
+  ConfirmDeleteButton.Visible:=false;
+  Close;
+end;
+
+procedure TOrganismEditForm.CreateEditUseCheckboxes;
+   //Create a check box for each possible use on EditUsePanel
+   //(excluding 'All')
+var i,maxwidth:integer;
+  begin
+    EditUsePanel.Height:=100+OrgUses.Count*25;
+    maxwidth:=0;
+    SetLength(chckBoxArray, OrgUses.Count-1);  //no 'All'
+    //create checkboxes
+    for i := 0 to OrgUses.Count-2   do  //NB count of checkboxes is 1 less than count of uses
+    begin
+      chckBoxArray[i] := TCheckBox.Create(nil) ;
+      chckBoxArray[i].Parent:=EditUsePanel;    //need parent to display component
+      chckBoxArray[i].top:=40+i*25;
+      chckBoxArray[i].left:=20;
+      chckBoxArray[i].ClientWidth:=Canvas.TextWidth(OrgUses[i+1].Heading)+100;
+      if chckBoxArray[i].ClientWidth>maxwidth then maxwidth:=chckBoxArray[i].ClientWidth;
+      chckBoxArray[i].Caption:=OrgUses[i+1].Heading;
+    end;
+    AcceptUseButton.Top:=EditUsePanel.Height-50;
+    CancelUseButton.Top:=AcceptUseButton.Top;
+    EditUsePanel.Width:=maxwidth;
+    AcceptUseButton.Left:=40;
+    CancelUseButton.Left:=(EditUsePanel.Width-CancelUseButton.Width-AcceptUseButton.Left) ;
+  end;
+
+procedure TOrganismEditForm.DisplayEPPTStatusInfo(orgcode: ansistring);
+begin
+  // check code & preferred name in EPPT
+
+  PrefName.Caption := CurrentOrg.PreferredName;
+  CurrentOrg.PopulateEPPTStatus;
+  with CurrentOrg.EPPTCodeStatus do       //get status
+  begin
+
+    EPPTInfo.Caption := StatusMessage;
+    EPPTInfo.Font.Color := Colour;
+    OrgCodeText.Font.Color := Colour;
+    PrefName.Font.Color := Colour;
+    EPPTCode.Caption := altorgcode;
+    EPPTName.Caption := altprefname;
+    if (altorgcode<>'') or (altprefname<>'') then EPPTLabel.Caption:='EPPT:' else EPPTLabel.Caption:='';
+    WarnImage.Visible := (StatusCode > 2); // all except pref same and code new
+    if StatusCode = 0 then
+    begin
+      IMSHomeForm.EPPTLookupCB.Checked:=false;  //uncheck checkbox
+      EPPTInfo.Caption :=
+        'EPPT search has been disactivated. To reactivate it tick the checkbox on the main form';
+    end;
+    ViewEPPTNameButton.Enabled:= (CurrentOrg.EPPTNameList.Count>0) and not (StatusCode = 0);
+  end;
+end;
+
+procedure TOrganismEditForm.DisplayOrgNames;
+  // puts current org's names in NameDispList
+begin
+  if CurrentOrg.NameCount = 0 then
+  begin
+    NameQuery.Close;
+    NameQuery.ParamByName('OrgCode').Value:=CurrentOrg.orgcode;
+    NameQuery.Open;
+    CurrentOrg.ReadNamesFromDataset(NameQuery); // copy names to list
+  end;
+  CurrentOrg.NameList.Sort(TComparer<TOrgName>.Construct(IMSHomeForm.OrgNamesComparison));
+  FillNameDispList
+end;
+
+procedure TOrganismEditForm.DeleteFindButtonClick(Sender: TObject);
+begin
+  if MessageDlg('Delete find?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  begin
+    FindQuery.Delete;
+    FindDispList.Items[FindDispList.ItemIndex].Delete;
+    UnLockEditFindPanel;
+    UpdateFindCount;
+  end;
+end;
+
+procedure TOrganismEditForm.DeleteNameButtonClick(Sender: TObject);
+begin
+  if (TScientificName(NameDispList.Items[NameDispList.ItemIndex].Data).Preferred=true)
+    and (Mode=OrgDeleteMode) then
+    ShowMessage('Cannot delete preferred name. Change preferred name first')
+  else if MessageDlg('Delete name ' + NameDispList.Items[NameDispList.ItemIndex]
+      .Caption + '?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      CurrentOrg.DeleteNameByID(TOrgName(NameDispList.Items[NameDispList.ItemIndex].Data).NameID); // in org name list
+      NameDispList.DeleteSelected; // remove name from display
+      UnLockEditNamePanel;
+      SetOrgButtonsOn;
+    end;
+end;
+
+procedure TOrganismEditForm.DeleteRefButtonClick(Sender: TObject);
+begin
+  if MessageDlg('Delete reference?', mtConfirmation, [mbYes, mbNo], 0)
+    = mrYes then
+  begin
+    RefQuery.Delete;
+    RefDispList.Items[RefDispList.ItemIndex].Delete;
+    UpdateRefCount;
+    UnLockEditRefPanel;
+  end;
+end;
+
+procedure TOrganismEditForm.DisplayFinds(FindQuery:TIB_Query;orgcode:ansistring);
+var
+  AFind: TFind;
+begin
+  FindDispList.Clear;
+  if IMSDM.OpenDatasetForOrg(FindQuery, orgcode) then
+  begin
+    AFind := TFind.Create;
+    try
+      FindQuery.First;
+      while not FindQuery.eof do
+      begin
+        AFind.ReadFromDataset(FindQuery); // copy data
+        AddNewDispFind(AFind); // copy currentname to finds display
+        FindQuery.Next;
+      end;
+    finally
+      AFind.Free;
+    end;
+  end;
+  UpdateFindCount;
+end;
+
+procedure TOrganismEditForm.DisplayRefs(RefQuery:TIB_Query; orgcode:ansistring);
+var
+  ARef: TPageRef;
+begin
+  RefDispList.Clear;
+  if IMSDM.OpenDatasetForOrg(RefQuery, orgcode) then
+  begin
+    ARef := TPageRef.Create;
+    try
+      RefQuery.First;
+      while not RefQuery.eof do
+      begin
+        ARef.ReadFromDataset(RefQuery); // copy data
+        AddNewDispRef(ARef); // copy currentname to reference display
+        RefQuery.Next;
+      end;
+    finally
+      ARef.Free;
+    end;
+  end;
+  UpdateRefCount;
+end;
+
+procedure TOrganismEditForm.EditPagesChanging(Sender: TObject;
+  var AllowChange: Boolean);
+begin
+  //if edit in progress prevent page switch
+  if EditNamePanel.Visible or EditRefPanel.Visible or EditfindPanel.Visible or EditDistPanel.Visible then
+  begin
+    ShowMessage('Complete edit operation before switching panels');
+    AllowChange:=false;
+  end;
+end;
+
+procedure TOrganismEditForm.FamilyCodeChange(Sender: TObject);
+begin
+    if OrgDataSource.NeedToPost then SetOrgButtonsOn;
+end;
+
+procedure TOrganismEditForm.FillNameDispList;
+var
+  i: integer;
+begin
+    NameDispList.Clear;
+    for i := 0 to CurrentOrg.NameCount - 1 do
+    AddNewDispName(CurrentOrg.Names[i]); // copy currentname to name display panel
+    UpdateNameCount;
+end;
+
+procedure TOrganismEditForm.FillNameFields(AName: TOrgName);
+begin
+  with AName do
+  begin
+    EditNameFullname.Text:=Fullname;
+    LanguageLB.ItemIndex := LanguageLB.Items.IndexOf(LanguageName);
+    EditNameComments.Text:=Comments;
+  end;
+  if AName.IsScientific then
+  begin
+    PreferredCB.Checked := TScientificName(AName).preferred;
+    EditNameAuthority.Text:= TScientificName(AName).Author;
+  end
+  else
+  begin
+    EditNameAuthority.Text := '';
+    PreferredCB.Checked := false;
+  end;
+  PreferredNameChanged:=false;
+  EditNamePanel.Visible := true;
+end;
+
+procedure TOrganismEditForm.FillEditUsePanel;
+var i:integer;
+// sets checkboxes on use editing panel according to edited organism's Orguse
+//(excluding 'All')
+begin
+   for i := 0 to High(chckBoxArray) do   //NB 'All' not present so there are fewer checkboxes than uses
+      if ansipos(OrgUses[i+1].UseCode,CurrentOrg.UsedBy)>0 then //OrgUses start with 'All'
+          chckBoxArray[i].Checked:=true
+      else chckBoxArray[i].Checked:=false;
+   UsesDisplay.Caption:='Uses: '+CurrentOrg.Usedby;
+end;
+
+procedure TOrganismEditForm.ImportBookButtonClick(Sender: TObject);
+var
+  ABook: TBook; AUseCode,ANewUseCode:ansistring;
+begin
+    ABook := TBook.Create;
+    AUseCode:=BooksForm.BookUses.FindUseCode('Book');
+    ANewUseCode:=BooksForm.BookUses.FindUseCode(IMSHomeForm.currentBookName);
+  try
+    IMSHomeForm.PickABook(AUseCode,ANewUseCode, ABook);
+    // insert selected book details into new record
+    RefQuery.FieldValues['BOOKCODE'] := ABook.Bookcode;
+    RefQuery.FieldValues['VOLUME'] := ABook.Volume;
+  finally
+    ABook.Free;
+  end;
+end;
+
+procedure TOrganismEditForm.FindDispListClick(Sender: TObject);
+begin
+  if FindDispList.ItemIndex > -1 then // click was on items
+  begin
+    // retrieve data by org and book codes
+    FindQuery.Locate('ORGCODE;FORAYCODE',
+      VarArrayOf([CurrentOrg.orgcode,
+        FindDispList.Items[FindDispList.ItemIndex].Caption]), [], 0);
+    EditFindPanel.Visible := true;
+    LockEditFindPanel;
+    FindQuery.Edit;
+  end;
+
+end;
+
+procedure TOrganismEditForm.FindForayButtonClick(Sender: TObject);
+var
+  AForay: TForay;
+begin
+  AForay := TForay.Create;
+  try
+    ForayForm.Mode:=SearchMode; // set lookup mode (sets buttons etc)
+    ForayForm.ShowModal;
+    AForay.Assign(ForayForm.CurrentForay); // returns empty foray if none selected
+    FindQuery.FieldValues['FORAYCODE'] := AForay.Foraycode;
+   finally
+    AForay.Free;
+  end;
+end;
+
+procedure TOrganismEditForm.FormActivate(Sender: TObject);
+var i:integer;
+begin
+  //on first entry populate Language combo boxes
+  if LanguageLB.Items.Count = 0 then
+  begin
+    i:=1;                      //skip 0 (preferred name)
+    while LanguageLB.Items.Count < IMSHomeForm.LanguageLookup.Count do     //count of languages
+    begin
+      if IMSHomeForm.LanguageLookup.Codes[i]>'' then    //  and gaps
+        LanguageLB.Items.Add(IMSHomeForm.LanguageLookup.FindLanguageName(IMSHomeForm.LanguageLookup.Codes[i]));
+      inc(i);
+    end;
+    OrgDataSource.Dataset:=OrgQuery;
+    if not IMSHomeForm.EPPTLookupCB.Checked then
+       CurrentOrg.DisactivateEPPTConnection(true);
+    NewNameID:=0;
+  end;
+  if (CurrentOrg.orgcode='') or (CurrentOrg.orgcode<>OrgCodeText.Caption) then    //change of organism
+  begin
+    if (CurrentOrg.orgcode<>'') then
+    with OrgQuery do     //reset dataset for new org
+    begin
+      Close;
+      ParamByName('OrgCode').Value:=(CurrentOrg.orgcode);
+      Open;
+    end;
+    SetOrgButtonsOff;
+    //EditPages.ActivePage:=NameTab;
+    if Mode=OrgInsertMode then  //insertion
+    begin
+      unLockeditNamePanel;
+      NewOrgPanel.Visible := true;
+      OrgDataPanel.Visible:=false;
+      NameDispList.Clear;
+      UpdateNameCount;
+      LanguageLB.ItemIndex:=0;   //start with Latin, which is default
+      FocusControl(NewOrgCode)
+    end
+    else begin         //edit or deletion
+      OrgCodeText.Caption:= CurrentOrg.orgcode;
+      GetDetails;      //get basic data, names, finds, refs, etc
+      if Mode=OrgDeleteMode then
+        if not SetConfDeleteButton then //set if all counts ae zero
+          if MessageDlg('There are still names, references or finds associated with the organism. '+
+            'Do you want to delete everything now without checking? NB This cannot be undone.',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+          begin
+            RefQuery.First;
+            while not RefQuery.eof do       //delete all refs
+              RefQuery.Delete;
+            RefDispList.Clear;
+            UpdateRefCount;
+            FindQuery.First;
+            while not FindQuery.eof do      //delete all finds
+              FindQuery.Delete;
+            FindDispList.Clear;
+            UpdateFindCount;
+            NameQuery.First;
+            while not NameQuery.eof do      //delete all names
+              NameQuery.Delete;
+            NameDispList.Clear;
+            CurrentOrg.NameList.Clear;
+            CurrentOrg.PreferredName:=CurrentOrg.PreferredName+' [deleted]';
+            UpdateNameCount;
+          end
+          else begin        //edit record
+               OrgQuery.Edit;
+               NewOrgPanel.Visible := false;
+          end;
+    end;
+  end;
+end;
+
+procedure TOrganismEditForm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+    NameQuery.Close;
+    RefQuery.close;
+    FindQuery.close;
+    OrgQuery.close;
+end;
+
+procedure TOrganismEditForm.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if EditNamePanel.Visible or EditRefPanel.Visible or EditfindPanel.Visible or EditDistPanel.Visible or
+    OrgQuery.Modified then
+  begin
+    MessageDlg('Changes are in progress. Finish editing with Save or Cancel buttons before closing form',mtWarning,[mbOK],0);
+    CanClose:= false;
+  end
+end;
+
+procedure TOrganismEditForm.FormCreate(Sender: TObject);
+var i:integer;
+begin
+  CurrentOrg := TOrganism.Create;
+  OrgUses:=TOrgUses.Create;
+  CreateEditUseCheckboxes;
+end;
+
+procedure TOrganismEditForm.FormDestroy(Sender: TObject);
+var i:integer;
+begin
+  for i := 0 to OrgUses.Count-2 do
+    FreeAndNil(chckBoxArray[i]);
+  FreeAndNil(CurrentOrg);
+  FreeAndNil(OrgUses);
+end;
+
+procedure TOrganismEditForm.GetDetails;
+begin
+        CurrentOrg.ReadBasicFromDataSet(OrgQuery);
+        //display data for org
+        OrgDataPanel.Visible:=true;
+        FillEditUsePanel;
+        DisplayOrgNames;
+        DisplayRefs(RefQuery,CurrentOrg.Orgcode);
+        DisplayFinds(FindQuery,CurrentOrg.Orgcode);
+        EditNamePanel.Visible := false;
+        EditRefPanel.Visible := false;
+        EditFindPanel.Visible := false;
+        DisplayEPPTStatusInfo(CurrentOrg.orgcode);
+        Case Mode of
+        OrgEditNamesMode:  EditPages.ActivePage := NameTab;
+        OrgEditRefsMode:  EditPages.ActivePage := RefTab;
+        OrgEditFindsMode:  EditPages.ActivePage := FindTab;
+        OrgEditDistMode:  EditPages.ActivePage := DistribTab;
+        else  EditPages.ActivePage := NameTab;
+        End;
+end;
+
+function TOrganismEditForm.GetFamilyCode(orgcode: ansistring): ansistring;
+begin
+  result := IMSDM.GetFamily(ansistring(orgcode));
+end;
+
+
+procedure TOrganismEditForm.ImportNameButtonClick(Sender: TObject);
+// get an existing name and add it to current organism
+var i:integer;  AName:TOrgName;
+begin
+  OrgNameReviewForm.CurrentOrg.Assign(CurrentOrg);  //copy current org
+   if (Sender as TButton).Name='ImportNameButton' then
+  begin
+    OrgNameReviewForm.Mode := SingleImportMode;
+  end
+  else begin   //ViewEPPTNamesButton
+    OrgNameReviewForm.Mode := ViewMode;
+  end;
+  OrgNameReviewForm.SearchOrgcode.Text:=CurrentOrg.Orgcode;
+  if OrgNameReviewForm.ShowModal = mrOK then       //returnButton
+    if OrgNameReviewForm.Mode = MultipleImportMode then  //Import EPPT Names Button
+    begin
+    //copy EPPT names into namelist
+      for i:=0 to CurrentOrg.EPPTNameList.Count-1 do
+      begin
+        AName:= CurrentOrg.EPPTNameList.Items[i];
+        AName.EditStatus:='N';
+        Inc(NewNameID);
+        AName.NameID:=NewNameID;
+        if CurrentOrg.IndexOfName(AName.Fullname,TScientificName(AName).Author,AName.LanguageCode)<0 then
+          CurrentOrg.NameList.Add(AName);
+      end;
+      FillNameDispList;
+      SetOrgButtonsOn;  //change has been made
+    end
+    else if OrgNameReviewForm.resultName.orgcode <> '' then    //single name returned
+    begin
+      //copy data into editing area
+      FillNameFields(OrgNameReviewForm.resultName);
+    end;
+
+end;
+
+
+procedure TOrganismEditForm.InsertUseButtonClick(Sender: TObject);
+begin
+  EditUsePanel.Visible := true;
+end;
+
+procedure TOrganismEditForm.LockOtherEditPanels;
+var
+  i: integer;
+begin
+  OrgDataPanel.Enabled := false;
+  for i := 0 to EditPages.PageCount - 1 do
+    if i <> EditPages.ActivePageIndex then
+      EditPages.Pages[i].Enabled := false;
+end;
+
+procedure TOrganismEditForm.LockEditFindPanel;
+begin
+  NameDispList.Enabled := false;
+  NewFindButton.Enabled := false;
+  EditFindPanel.Visible := true;
+  FindDataSource.Dataset:=FindQuery;
+  //LockOtherEditPanels;
+end;
+
+procedure TOrganismEditForm.LockEditNamePanel;
+//prevent access to editing controls
+begin
+  NameDispList.Enabled := false;
+  NewNameButton.Enabled := false;
+  EditNamePanel.Visible := true;
+//  LockOtherEditPanels;
+end;
+
+procedure TOrganismEditForm.LockEditRefPanel;
+//prevent access to editing controls and open dataset
+begin
+  RefDispList.Enabled := false;
+  NewRefButton.Enabled := false;
+  EditRefPanel.Visible := true;
+  RefDataSource.Dataset:=RefQuery;
+  if not RefQuery.ACtive then RefQuery.Open;
+  //LockOtherEditPanels;
+end;
+
+procedure TOrganismEditForm.NameDispListClick(Sender: TObject);
+//get org from line selected
+begin
+  if NameDispList.ItemIndex > -1 then
+  begin
+      FillNameFields(NameDispList.Items[NameDispList.ItemIndex].Data);
+      LockEditNamePanel;
+  end;
+end;
+
+procedure TOrganismEditForm.NameDispListCompare(Sender: TObject; Item1,
+  Item2: TListItem; Data: Integer; var Compare: Integer);
+begin
+   //compare language then preferred (latin only) then name
+   compare := CompareText(Item1.SubItems[1],Item2.SubItems[1]);    //language
+   if compare=0 then
+      if Item1.SubItems[1]='Latin' then Compare:=CompareText(Item1.SubItems[2],Item2.SubItems[2])  //preferred
+      else Compare := CompareText(Item1.Caption,Item2.Caption);     //name
+end;
+
+procedure TOrganismEditForm.NameDispListCustomDrawItem(Sender: TCustomListView;
+  Item: TListItem; State: TCustomDrawState; var DefaultDraw: Boolean);
+begin
+  (Sender as TListView).Canvas.Font.Color:=IMSHomeForm.LanguageLookup.FindLanguageColour(IMSHomeForm.LanguageLookup.FindLanguageCode(Item.SubItems[1]));
+  if Item.SubItems[2]='P' then (Sender as TListView).Canvas.Font.Style:=[fsBold];
+end;
+
+function TOrganismEditForm.NameIsValid:boolean;
+begin
+  result:=true;
+  if (EditNameFullName.Text > '') and (LanguageLB.ItemIndex > -1) then
+  begin
+    if LanguageLB.ItemIndex=0 then  //Latin
+    begin
+      if EditNameAuthority.Text = '' then
+        if MessageDlg('Authority is missing. Save without authority? Cancel returns to edit',mtWarning,[mbYes,mbCancel],0)<>mrYes then result:=false;
+    end
+    else begin
+      if EditNameAuthority.Text<>'' then
+      begin
+           MessageDlg('Authority not appropriate for common name.',mtWarning,[mbOK],0);
+           result:=false;
+      end;
+      if PreferredCB.Checked then
+      begin
+        MessageDlg('Preferred attribute not appropriate for common name.',mtWarning,[mbOK],0);
+        result:=false;
+      end;
+    end
+  end
+  else begin
+    ShowMessage('The name and/or language field is empty');
+    result:=false;
+  end;
+end;
+
+procedure TOrganismEditForm.NameTransferButtonClick(Sender: TObject);
+var TransferDest:ansistring;
+begin
+  TransferDest:=trim(IMSHomeForm.ValidOrgCode(NameTransferCode.text));
+  if (TransferDest<>'') and (TransferDest<>CurrentOrg.Orgcode) then
+  begin
+      //transfer names to new code
+      NameQuery.First;
+      while not NameQuery.eof do      //transfer all names
+      begin
+        NameQuery.FieldByName('Orgcode').Value:=TransferDest;   //new code
+        NameQuery.FieldByName('PREFERRED').Value:=0;            //not preferred
+        NameQuery.post;
+        NameQuery.Next;
+      end;
+      NameTransferPanel.Visible:=false;
+//      NameTransferCode.Text:='';
+      NameDispList.Clear;
+      CurrentOrg.PreferredName:=CurrentOrg.PreferredName+' [formerly]';
+  end
+  else ShowMessage('Enter code of organism which will receive names');
+end;
+
+procedure TOrganismEditForm.NewFindButtonClick(Sender: TObject);
+begin
+  LockEditFindPanel;
+  FindQuery.Append;
+  FindQuery.FieldValues['ORGCODE'] := CurrentOrg.orgcode;
+end;
+
+procedure TOrganismEditForm.NewNameButtonClick(Sender: TObject);
+begin
+  LockEditNamePanel;
+  NameInsertRequested:=true;
+end;
+
+procedure TOrganismEditForm.NewOrgCodeExit(Sender: TObject);
+begin
+   NewOrgCode.Text:=Uppercase(NewOrgCode.Text);
+end;
+
+procedure TOrganismEditForm.NewOrgPanelExit(Sender: TObject);
+begin
+  NewOrgPanel.Visible:=false;
+end;
+
+procedure TOrganismEditForm.NewRefButtonClick(Sender: TObject);
+begin
+  LockEditRefPanel;
+  RefQuery.Append;
+  RefQuery.FieldValues['ORGCODE'] := CurrentOrg.orgcode;
+end;
+
+procedure TOrganismEditForm.OrgCodeOKButtonClick(Sender: TObject);
+var
+  ContinueProcessing:boolean;OldCode,NewCode:ansistring;i:integer;
+begin
+  if (NewOrgCode.Text <> CurrentOrg.orgcode) then // organism code has been changed
+  begin
+    NewCode:=IMSHomeForm.ValidOrgCode(NewOrgCode.Text);   //validate
+    if Newcode='        ' then ShowMessage('Invalid code')
+    else begin       //valid code, now test length same as before if a code change
+      ContinueProcessing:=true;      //initialise as following 2 tests not always applicable
+      if (Mode<>OrgInsertMode) and (length(NewOrgCode.Text)<>length(CurrentOrg.orgcode)) then
+          if MessageDlg('Code '+NewCode+' is longer than previous code. Continue?',mtWarning,[mbYes,mbNo],0)=mrYes then
+            ContinueProcessing:=true
+            else ContinueProcessing:=false;
+            //test if out of range
+      if ContinueProcessing then
+        if (length(NewOrgCode.Text)<5) or (length(NewOrgCode.Text)>6) then
+          if MessageDlg('Code '+NewCode+' is outside the normal code length range. Continue?',mtWarning,[mbYes,mbNo],0)=mrYes then
+            ContinueProcessing:=true
+            else ContinueProcessing:=false;
+      if ContinueProcessing then
+      begin
+      // test if already used, giving editing option if so
+        if IMSDM.IsOrgCodeInDataset(OrgQuery,NewCode) then   //code already used
+        begin
+          ContinueProcessing:=false;      //code exists so either change the record or stop
+          if MessageDlg('Code '+NewCode+' is already in database. Edit record now?',mtWarning,[mbYes,mbNo],0)=mrYes then
+          begin
+            Mode:=OrgEditNamesMode;
+            CurrentOrg.Clear;
+            CurrentOrg.Orgcode:=NewCode;
+            NewOrgPanel.Visible := false;
+            CurrentOrg.ReadBasicFromDataSet(OrgQuery); //get details
+            GetDetails;
+          end
+        end
+        else    //code is valid and not already in database
+        begin
+          ContinueProcessing:=true;
+        end;
+      end;    //ContinueProcessing
+      // continue with chosen code
+      if ContinueProcessing then   //code is OK
+      begin
+        OrgDataPanel.Visible:=true;  //make data visible
+        if Mode=OrgInsertMode then // new organism
+        begin
+          CurrentOrg.Clear;
+          CurrentOrg.Orgcode:=NewCode;
+          with OrgQuery do     //reset dataset for new org
+          begin
+              Close;
+              ParamByName('OrgCode').Value:=CurrentOrg.orgcode;
+              Open;
+          end;
+          CurrentOrg.Family := GetFamilyCode(CurrentOrg.Orgcode);
+          OrgQuery.Insert;         //create new record with basic data
+          OrgQuery.FieldByName('ORGCODE').Value := NewCode;
+          OrgQuery.FieldByName('FAMILY').Value := CurrentOrg.Family;
+          CurrentOrg.PopulateEPPTNameList;
+        end
+        else begin // code change
+         OldCode:=CurrentOrg.Orgcode;
+         if MessageDlg('Confirm change of code from '+OldCode+' to '+NewCode+'?',mtConfirmation,[mbOK,mbCancel],0)=mrOK then
+         begin
+          CurrentOrg.Orgcode:=NewCode;
+          CurrentOrg.PreferredName:='(New code)'+CurrentOrg.PreferredName;
+          //create a new record in dataset with basic data
+          OrgQuery.Insert;
+          OrgQuery.FieldByName('ORGCODE').Value := CurrentOrg.orgcode; //change the code
+          CurrentOrg.WriteBasicToDataset(Orgquery); //Save changed record
+          PrefName.Caption:=CurrentOrg.PreferredName;
+
+
+          //change code on all names
+          if CurrentOrg.NameCount > 0 then
+          begin
+              for i:=0 to CurrentOrg.NameCount-1 do
+              begin
+                CurrentOrg.Names[i].Orgcode:=CurrentOrg.orgcode;
+                CurrentOrg.Names[i].EditStatus:='N';      //names are new for the new record
+              end;
+              DisplayOrgNames;
+          end;
+          //reselect
+          NameQuery.Close;
+          NameQuery.ParamByName('OrgCode').Value:=CurrentOrg.orgcode;
+          NameQuery.Open;
+          //change code on finds
+          DisplayFinds(FindQuery,OldCode);
+          FindQuery.Close;
+          FindQuery.ParamByName('OrgCode').Value:=CurrentOrg.orgcode;
+          FindQuery.Open;
+          for i:=0 to FindDispList.Items.Count - 1 do
+          begin
+            FindQuery.Insert;
+            FindQuery.FieldValues['ORGCODE']:=CurrentOrg.orgcode;
+            FindQuery.FieldValues['FORAYCODE']:=FindDispList.Items[i].Caption;
+            FindQuery.Post;
+          end;
+          DisplayRefs(RefQuery,OldCode);
+          RefQuery.Close;
+          RefQuery.ParamByName('OrgCode').Value:=CurrentOrg.orgcode;
+          RefQuery.Open;
+          for i:=0 to RefDispList.Items.Count - 1 do
+          begin
+            RefQuery.Insert;
+            RefQuery.FieldValues['ORGCODE']:=CurrentOrg.orgcode;
+            RefQuery.FieldValues['BOOKCODE']:=FindDispList.Items[i].Caption;
+            RefQuery.FieldValues['VOLUME']:=FindDispList.Items[i].SubItems[0];
+            RefQuery.FieldValues['PAGENO']:=FindDispList.Items[i].SubItems[1];
+            RefQuery.Post;
+          end;
+          ShowMessage('A new entry has been made with the new code. '+
+            'Check all data including names, references and finds and then delete the old code entry');
+         end;
+        end;
+        NewOrgPanel.Visible := false;
+      end;  //ContinueProcessing true
+    end;  //Valid code
+  end;  //change of organism code
+end;
+
+procedure TOrganismEditForm.PolnoChange(Sender: TObject);
+begin
+    if OrgDataSource.NeedToPost then SetOrgButtonsOn;
+end;
+
+procedure TOrganismEditForm.PreferredCBClick(Sender: TObject);
+begin
+  PreferredNameChanged:=true;
+end;
+
+procedure TOrganismEditForm.RecoverNameFields(AName:TOrgName);
+begin
+      // update name in organism namelist
+      AName.fullname := EditNameFullName.Text;
+      AName.LanguageName:=LanguageLB.Items[LanguageLB.ItemIndex];
+      AName.LanguageCode:=IMSHomeForm.LanguageLookup.FindLanguageCode(AName.LanguageName);
+      AName.Comments := EditNameComments.Text;
+      if AName.IsScientific then
+      begin
+        TScientificName(AName).preferred := PreferredCB.Checked;
+        TScientificName(AName).author := EditNameAuthority.Text;
+      end;
+end;
+
+procedure TOrganismEditForm.RefDispListClick(Sender: TObject);
+begin
+  if RefDispList.ItemIndex > -1 then // click was on items
+  begin
+    // retrieve data by org and book codes
+    RefQuery.Locate('ORGCODE;BOOKCODE',
+      VarArrayOf([CurrentOrg.orgcode,
+        RefDispList.Items[RefDispList.ItemIndex].Caption]), [], 0);
+    EditRefPanel.Visible := true;
+    LockEditRefPanel;
+    RefQuery.Edit;
+  end;
+end;
+
+procedure TOrganismEditForm.RefTransferButtonClick(Sender: TObject);
+var TransferDest:ansistring;
+begin
+  TransferDest:=trim(IMSHomeForm.ValidOrgCode(RefTransferCode.text));
+  if (TransferDest<>'') and (TransferDest<>CurrentOrg.Orgcode) then
+  begin
+      //transfer names to new code
+      RefQuery.First;
+      while not RefQuery.eof do      //transfer all refs
+      begin
+        RefQuery.FieldByName('Orgcode').Value:=TransferDest;   //new code
+        RefQuery.post;
+        RefQuery.Next;
+      end;
+      RefTransferPanel.Visible:=false;
+      RefTransferCode.text:='';
+      RefDispList.Clear;
+  end
+  else ShowMessage('Enter code of organism which will receive references');
+
+end;
+
+procedure TOrganismEditForm.SaveFindButtonClick(Sender: TObject);
+var
+  LineInserted: boolean;
+begin
+  // if required fields present save record
+  if (EditForayCode.Text > '') then
+  begin
+    if FindQuery.NeedToPost then
+    begin
+      // insertion
+      if (FindQuery.state = dssInsert) then
+      begin
+        LineInserted := true;
+        // add new data to displist
+        with FindDispList.Items.Add do
+        begin
+          Caption := EditForayCode.Text;
+        end
+      end
+      else
+      begin
+        // show changed data in displist
+        FindDispList.Items[RefDispList.ItemIndex].Caption :=
+          EditRefBookCode.Text;
+        LineInserted := false;
+      end;
+      FindQuery.Post;
+      if LineInserted then
+        FindQuery.Refresh; // refresh data
+      UnLockEditFindPanel;
+      UpdateFindCount;
+    end;
+  end;
+end;
+
+procedure TOrganismEditForm.SaveNameButtonClick(Sender: TObject);
+//save name to dataset
+var index:integer; AName:TOrgName;
+begin
+  // if minimum required fields present save
+  if NameIsValid then
+  begin
+    if NameInsertRequested then    //make the new name
+    begin
+        //add name skeleton to list of organism names
+        Index:=CurrentOrg.AddName(TOrgName.Create(CurrentOrg.Orgcode));
+        CurrentOrg.Names[Index].EditStatus:='N';
+        Inc(NewNameID);
+        CurrentOrg.Names[Index].NameID:=NewNameID;  //give it an ID so it can be found again
+    end
+    else begin
+      Index:=NameDispList.ItemIndex;
+      if CurrentOrg.Names[Index].EditStatus=' ' then CurrentOrg.Names[Index].EditStatus:='M'; //might be editing a new name
+    end;
+    AName:= CurrentOrg.Names[Index];
+    RecoverNameFields(AName); // copy edited values to fields
+    // show changed data in displist
+    if NameInsertRequested then    //make a new line in display
+    begin
+        // add to displist
+        with NameDispList.Items.Add do
+        begin
+          Caption := AName.FullName;
+          if AName.IsScientific then SubItems.Add(TScientificname(AName).Author) else SubItems.Add(' ');
+          SubItems.Add(LanguageLB.Items[LanguageLB.ItemIndex]);
+          if PreferredCB.Checked then SubItems.Add('P') else SubItems.Add(' ');
+          Data:=AName;
+        end;
+        NameDispList.ItemIndex:=NameDispList.Items.Count-1;
+        NameInsertRequested:=false;
+    end
+    else begin
+      NameDispList.Items[Index].Caption := AName.FullName;
+      if AName.IsScientific then NameDispList.Items[Index].SubItems.Add(TScientificname(AName).Author)
+      else NameDispList.Items[Index].SubItems.Add(' ');
+      NameDispList.Items[Index].SubItems[1] :=
+          LanguageLB.Items[LanguageLB.ItemIndex];
+      if PreferredCB.Checked then NameDispList.Items[Index].SubItems[2]:='P'
+      else NameDispList.Items[Index].SubItems[2]:=' ';
+    end;
+    //change preferred name if necessary
+    if PreferredCB.Checked and PreferredNameChanged then  //this name is preferred name
+    begin
+      if (CurrentOrg.NameCount=1) then   //only one, don't ask
+         CurrentOrg.ChangePreferredName(Index,NameQuery)
+      else
+        if MessageDlg('Confirm change of preferred name',mtConfirmation,[mbYes,mbCancel],0)=mrYes then
+        begin
+             index:=CurrentOrg.ChangePreferredName(Index,NameQuery);
+             if Index>=0 then NameDispList.Items[index].SubItems[2]:=' ';   //
+        end
+        else NameDispList.Items[Index].SubItems[2]:=' ';  //ignore change
+      DisplayEPPTStatusInfo(CurrentOrg.orgcode);  //reevaluate EPPT status
+    end;
+    UnLockEditNamePanel; // exit
+    SetOrgButtonsOn;
+  end
+end;
+
+procedure TOrganismEditForm.SaveOrgButtonClick(Sender: TObject);
+var reply:boolean;
+begin
+  if (CurrentOrg.PreferredName='') then ShowMessage('Organism must have a preferred name')
+  else begin
+    reply:=false;
+    if (Polno.Text='') and
+      (MessageDlg('Insert a Polunin number before saving?',mtWarning,[mbYes,mbNo],0)=mrYes) then
+      reply:=true;
+    if (not reply) and (FamilyCode.Text='') and
+      (MessageDlg('Insert a family code before saving?',mtWarning,[mbYes,mbNo],0)=mrYes) then
+      reply:=true;
+    if (not reply) and (CurrentOrg.UsedByIsEmpty) and
+      (MessageDlg('Insert a use code before saving?',mtWarning,[mbYes,mbNo],0)=mrYes) then
+      reply:=true;
+    if not reply then
+    begin
+      if OrgQuery.NeedToPost then
+      begin
+        OrgQuery.FieldValues['DateModified']:=today;
+        OrgQuery.Post;
+      end;
+      if CurrentOrg.WriteNamesToDataset(NameQuery) then Close;    //Close if names OK
+    end;
+  end;
+end;
+
+procedure TOrganismEditForm.SaveRefButtonClick(Sender: TObject);
+var
+  LineInserted: boolean;
+begin
+  // if required fields present save record
+  if (EditRefBookCode.Text > '') and (EditRefPageno.Text > '') then
+  begin
+    if RefQuery.NeedToPost then
+    begin
+      // insertion
+      if (RefQuery.state = dssInsert) then
+      begin
+        LineInserted := true;
+        // add new data to displist
+        with RefDispList.Items.Add do
+        begin
+          Caption := EditRefBookCode.Text;
+          SubItems.Add(EditRefVolume.Text);
+          SubItems.Add(EditRefPageno.Text);
+        end
+      end
+      else
+      begin
+        // show changed data in displist
+        RefDispList.Items[RefDispList.ItemIndex].Caption :=
+          EditRefBookCode.Text;
+        RefDispList.Items[RefDispList.ItemIndex].SubItems[0] :=
+          EditRefVolume.Text;
+        RefDispList.Items[RefDispList.ItemIndex].SubItems[1] :=
+          EditRefPageno.Text;
+        LineInserted := false;
+      end;
+      RefQuery.Post;
+      if LineInserted then
+        RefQuery.Refresh; // refresh data
+      UnLockEditRefPanel;
+    end;
+  end;
+end;
+
+function TOrganismEditForm.SetConfDeleteButton:boolean;
+begin
+  ConfirmDeleteButton.Visible := (Mode=OrgDeleteMode) and
+    (CurrentOrg.NameCount = 0) and (RefCountDisp.Caption = '0') and
+    (FindCountDisp.Caption = '0');
+  if not SaveOrgButton.Visible then CloseButton.Visible:= not ConfirmDeleteButton.Visible;
+  result:=ConfirmDeleteButton.Visible;
+end;
+
+procedure TOrganismEditForm.SetOrgButtonsOff;
+begin
+  SaveOrgButton.Visible := false;
+  CancelOrgButton.Visible := false;
+  CloseButton.Visible:=true;
+end;
+
+procedure TOrganismEditForm.SetOrgButtonsOn;
+begin
+  SaveOrgButton.Visible := true;
+  CancelOrgButton.Visible := true;
+  CloseButton.Visible:=false;
+end;
+
+procedure TOrganismEditForm.UnLockOtherEditPanels;
+var
+  i: integer;
+begin
+  OrgDataPanel.Enabled := true;
+  for i := 0 to EditPages.PageCount - 1 do
+    if i <> EditPages.ActivePageIndex then
+      EditPages.Pages[i].Enabled := true;
+end;
+
+procedure TOrganismEditForm.UnLockEditFindPanel;
+begin
+  FindDispList.Enabled := true;
+  EditFindPanel.Visible := false;
+  NewFindButton.Enabled := true;
+  //UnLockOtherEditPanels;
+  UpdateFindCount;
+end;
+
+procedure TOrganismEditForm.UnLockEditNamePanel;
+begin
+  NameDispList.Enabled := true;
+  EditNameFullName.Text:='';   //clear previous use
+  EditNameAuthority.Text:='';
+  PreferredCB.Checked:=false;
+  EditNamePanel.Visible := false;
+  NewNameButton.Enabled := true;
+  //UnLockOtherEditPanels;
+  UpdateNameCount;
+end;
+
+procedure TOrganismEditForm.UnLockEditRefPanel;
+begin
+  RefDispList.Enabled := true;
+  EditRefPanel.Visible := false;
+  NewRefButton.Enabled := true;
+  //UnLockOtherEditPanels;
+  UpdateRefCount;
+end;
+
+procedure TOrganismEditForm.UpdateFindCount;
+begin
+  FindCountDisp.Caption := IntToStr(FindQuery.Recordcount);
+  SetConfDeleteButton;
+end;
+
+procedure TOrganismEditForm.UpdateNameCount;
+begin
+  NameCountDisp.Caption := IntToStr(CurrentOrg.NameCount);
+  PrefName.Caption := CurrentOrg.PreferredName;
+  SetConfDeleteButton;
+end;
+
+procedure TOrganismEditForm.UpdateRefCount;
+begin
+  RefCountDisp.Caption := IntToStr(RefQuery.Recordcount);
+  SetConfDeleteButton;
+end;
+
+
+end.
+

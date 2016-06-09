@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2011/03/01 19:31:18.941.pas,C:\Users\Clare\Documents\RAD Studio\Projets\Common\BookData.pas=</Transaction>
+    <Transaction>2011/03/01 19:31:18.947.dfm,C:\Users\Clare\Documents\RAD Studio\Projets\Common\BookData.dfm=</Transaction>
+    <Transaction>2011/03/01 19:36:36.649.pas,C:\Users\Clare\Documents\RAD Studio\Projets\Fungi\FungusData.pas=</Transaction>
+    <Transaction>2011/03/01 19:36:36.649.dfm,C:\Users\Clare\Documents\RAD Studio\Projets\Fungi\FungusData.dfm=</Transaction>
+    <Transaction>2011/03/01 21:02:38.217.pas,C:\Users\Clare\Documents\RAD Studio\Projets\JPD\Unit2.pas=C:\Users\Clare\Documents\RAD Studio\Projets\Common\BooksTransfer.pas</Transaction>
+    <Transaction>2011/03/01 21:02:38.217.dfm,C:\Users\Clare\Documents\RAD Studio\Projets\JPD\Unit2.dfm=C:\Users\Clare\Documents\RAD Studio\Projets\Common\BooksTransfer.dfm</Transaction>
+    <Transaction>2011/03/02 02:36:00.880.dproj,C:\Users\Clare\Documents\RAD Studio\Projets\JPD\Project1.dproj=C:\Users\Clare\Documents\RAD Studio\Projets\Common\BookCopy.dproj</Transaction>
+    <Transaction>2012/12/15 23:57:16.072.pas,C:\Users\Clare\Documents\Rad Studio\Projets\Common\Unit1.pas=C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookEdit.pas</Transaction>
+    <Transaction>2012/12/15 23:57:16.072.dfm,C:\Users\Clare\Documents\Rad Studio\Projets\Common\Unit1.dfm=C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookEdit.dfm</Transaction>
+    <Transaction>2013/01/05 19:50:03.556.pas,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BooksTransfer.pas=C:\Users\Clare\Documents\Rad Studio\Projets\Common\FungiTransfer.pas</Transaction>
+    <Transaction>2013/01/05 19:50:03.556.dfm,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BooksTransfer.dfm=C:\Users\Clare\Documents\Rad Studio\Projets\Common\FungiTransfer.dfm</Transaction>
+    <Transaction>2013/01/05 19:50:46.142.pas,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookData.pas=</Transaction>
+    <Transaction>2013/01/05 19:50:46.142.dfm,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookData.dfm=</Transaction>
+    <Transaction>2013/01/05 19:53:34.844.pas,C:\Users\Clare\Documents\Rad Studio\Projets\Fungi\FungusData.pas=</Transaction>
+    <Transaction>2013/01/05 19:53:34.844.dfm,C:\Users\Clare\Documents\Rad Studio\Projets\Fungi\FungusData.dfm=</Transaction>
+    <Transaction>2013/01/05 19:53:58.943.pas,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookEdit.pas=C:\Users\Clare\Documents\Rad Studio\Projets\Common\FungusEdit.pas</Transaction>
+    <Transaction>2013/01/05 19:53:58.943.dfm,C:\Users\Clare\Documents\Rad Studio\Projets\Common\BookEdit.dfm=C:\Users\Clare\Documents\Rad Studio\Projets\Common\FungusEdit.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

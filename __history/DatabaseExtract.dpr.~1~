@@ -1,0 +1,16 @@
+program DatabaseExtract;
+
+uses
+  Forms,
+  DataExtractor in 'DataExtractor.pas' {Form1},
+  IMSData in 'IMSData.pas' {IMSDM: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TIMSDM, IMSDM);
+  Application.Run;
+end.

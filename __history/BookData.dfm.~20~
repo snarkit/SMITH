@@ -1,0 +1,5 @@
+object BooksDM: TBooksDM
+  OldCreateOrder = False
+  Height = 210
+  Width = 353
+end

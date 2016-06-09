@@ -1,0 +1,215 @@
+object OrganismDM: TOrganismDM
+  OldCreateOrder = False
+  Height = 440
+  Width = 342
+  object AllOrgsWithNames: TIB_Query
+    DatabaseName = '127.0.0.1:fungi'
+    FieldsCharCase.Strings = (
+      'O.ORGCODE=UPPER')
+    FieldsDisplayWidth.Strings = (
+      'O.ORGCODE=118'
+      'O.IMS=24'
+      'O.COMMENTS=0'
+      'O.CARD=0')
+    IB_Connection = OrganismConnection
+    SQL.Strings = (
+      'SELECT O.ORGCODE'
+      '     , O.COMMENTS'
+      '     , O.CARD'
+      '     , N.NAME'
+      'FROM ORGNAMES N'
+      'INNER JOIN ORGANISMS O'
+      'ON O.ORGCODE=N.ORGCODE'
+      'where N.LANGUAGE='#39'A'#39
+      'AND N.LN=0'
+      'ORDER BY O.ORGCODE')
+    AutoFetchAll = True
+    JoinLinks.Strings = (
+      'O.ORGCODE=N.ORGCODE')
+    OrderingItems.Strings = (
+      'O.ORGCODE=O.ORGCODE;O.ORGCODE DESC'
+      'N.NAME=N.NAME;N.NAME DESC')
+    OrderingLinks.Strings = (
+      'O.ORGCODE=ITEM=1'
+      'N.NAME=ITEM=2')
+    Left = 48
+    Top = 72
+  end
+  object AllOrgsDS: TIB_DataSource
+    AutoEdit = False
+    AutoInsert = False
+    Dataset = AllOrgsWithNames
+    Left = 128
+    Top = 72
+  end
+  object OrganismConnection: TIB_Connection
+    PasswordStorage = psNotSecure
+    SQLDialect = 3
+    Params.Strings = (
+      'CHARACTER SET=UTF8'
+      'PATH=fungi'
+      'USER NAME=SYSDBA'
+      'SQL DIALECT=3'
+      'SERVER=127.0.0.1'
+      'FORCED WRITES=TRUE'
+      'RESERVE PAGE SPACE=TRUE'
+      'PROTOCOL=TCP/IP')
+    Left = 56
+    Top = 12
+    SavedPassword = '.JuMbLe.01.432B0639073E0E4B49'
+  end
+  object OrgByCodeQuery: TIB_Query
+    DatabaseName = '127.0.0.1:fungi'
+    FieldsCharCase.Strings = (
+      'ORGCODE=UPPER')
+    FieldsEditMask.Strings = (
+      'ORGCODE=>LLLLL<A')
+    FieldsReadOnly.Strings = (
+      'ORGID=TRUE')
+    FieldsVisible.Strings = (
+      'ORGID=FALSE'
+      'ORGCODE=TRUE'
+      'IMS=TRUE')
+    IB_Connection = OrganismConnection
+    SQL.Strings = (
+      'SELECT '
+      '       ORGID'
+      '     , ORGCODE'
+      '     , IMS'
+      '     , COMMENTS'
+      '     , CARD'
+      'FROM ORGANISMS'
+      'WHERE ORGCODE = :orgcode')
+    DefaultValues.Strings = (
+      'IMS=True')
+    DeleteSQL.Strings = (
+      'DELETE FROM ORGANISMS WHERE ORGID = :OLD_ORGID')
+    EditSQL.Strings = (
+      'UPDATE ORGANISMS SET'
+      '   ORGANISMS.ORGCODE = :ORGCODE,'
+      '   ORGANISMS.IMS = :IMS,'
+      '   ORGANISMS.COMMENTS = :COMMENTS,'
+      '   ORGANISMS.CARD = :CARD'
+      'WHERE'
+      '   ORGID = :OLD_ORGID')
+    InsertSQL.Strings = (
+      'INSERT INTO ORGANISMS('
+      '   ORGCODE,'
+      '   IMS,'
+      '   COMMENTS,'
+      '   CARD)'
+      'VALUES ('
+      '   :ORGCODE,'
+      '   :IMS,'
+      '   :COMMENTS,'
+      '   :CARD)')
+    KeyLinks.Strings = (
+      'ORGANISMS.ORGID')
+    Left = 32
+    Top = 144
+    ParamValues = (
+      'ORGCODE=')
+  end
+  object OrgByCodeDS: TIB_DataSource
+    AutoEdit = False
+    AutoInsert = False
+    Dataset = OrgByCodeQuery
+    Left = 120
+    Top = 140
+  end
+  object NamesForOrgDS: TIB_DataSource
+    AutoEdit = False
+    AutoInsert = False
+    Dataset = NamesForOrgQuery
+    Left = 120
+    Top = 200
+  end
+  object NamesForOrgQuery: TIB_Query
+    ColumnAttributes.Strings = (
+      'NAME=BLANKISNULL'
+      'LANGUAGE=BLANKISNULL')
+    DatabaseName = '127.0.0.1:fungi'
+    FieldsAlignment.Strings = (
+      'LANGUAGE=CENTER'
+      'LN=CENTER')
+    FieldsCharCase.Strings = (
+      'LANGUAGE=UPPER')
+    FieldsDisplayLabel.Strings = (
+      'COMMENTS=Comments')
+    FieldsGridLabel.Strings = (
+      'LN=No'
+      'NAME=Name'
+      'AUTHORITY=Authority'
+      'LANGUAGE=Lang')
+    FieldsDisplayWidth.Strings = (
+      'LN=15'
+      'LANGUAGE=25'
+      'AUTHORITY=194'
+      'COMMENTS=0'
+      'NAME=200')
+    FieldsEditMask.Strings = (
+      'L'
+      'LANGUAGE=L')
+    FieldsReadOnly.Strings = (
+      'NAMEID=TRUE')
+    FieldsVisible.Strings = (
+      'NAMEID=FALSE'
+      'ORGCODE=FALSE')
+    IB_Connection = OrganismConnection
+    SQL.Strings = (
+      'SELECT ORGCODE'
+      '     , NAMEID'
+      '     , NAME '
+      '     , AUTHORITY'
+      '     , LANGUAGE'
+      '     , LN'
+      '     , COMMENTS'
+      'FROM ORGNAMES '
+      'WHERE ORGNAMES.ORGCODE = :orgcode')
+    AutoFetchAll = True
+    DefaultValues.Strings = (
+      'LN=0'
+      'LANGUAGE=A')
+    DeleteSQL.Strings = (
+      'DELETE FROM ORGNAMES '
+      'WHERE'
+      '   NAMEID = :OLD_NAMEID')
+    EditSQL.Strings = (
+      'UPDATE ORGNAMES SET'
+      '   ORGNAMES.ORGCODE = :ORGCODE,'
+      '   ORGNAMES.NAME = :NAME,'
+      '   ORGNAMES.AUTHORITY = :AUTHORITY,'
+      '   ORGNAMES.LANGUAGE = :LANGUAGE,'
+      '   ORGNAMES.LN = :LN,'
+      '   ORGNAMES.COMMENTS = :COMMENTS'
+      'WHERE'
+      '   NAMEID = :OLD_NAMEID')
+    InsertSQL.Strings = (
+      'INSERT INTO ORGNAMES('
+      '   ORGCODE,'
+      '   NAME,'
+      '   AUTHORITY,'
+      '   LANGUAGE,'
+      '   LN,'
+      '   COMMENTS)'
+      'VALUES ('
+      '   :ORGCODE,'
+      '   :NAME,'
+      '   :AUTHORITY,'
+      '   :LANGUAGE,'
+      '   :LN,'
+      '   :COMMENTS)')
+    KeyLinks.Strings = (
+      'ORGNAMES.NAMEID')
+    OrderingItems.Strings = (
+      'LANGUAGE=LANGUAGE;LANGUAGE DESC'
+      'LN=LN;LN DESC')
+    OrderingLinks.Strings = (
+      'LANGUAGE=ITEM=1'
+      'LN=ITEM=2')
+    Left = 32
+    Top = 208
+    ParamValues = (
+      'ORGCODE=')
+  end
+end

@@ -1,0 +1,165 @@
+object BooksDM: TBooksDM
+  OldCreateOrder = False
+  Height = 210
+  Width = 353
+  object BooksConnection: TIB_Connection
+    DefaultTransaction = BooksTransaction
+    PasswordStorage = psNotSecure
+    SQLDialect = 3
+    DatabaseName = 'BOOKS'
+    Params.Strings = (
+      'SQL DIALECT=3'
+      'USER NAME=SYSDBA'
+      'CHARACTER SET=UTF8'
+      'FORCED WRITES=TRUE'
+      'RESERVE PAGE SPACE=TRUE'
+      'PATH=bookplates'
+      'PROTOCOL=TCP/IP'
+      'SERVER=127.0.0.1')
+    Left = 40
+    Top = 16
+    SavedPassword = '.JuMbLe.01.432B0639073E0E4B49'
+  end
+  object MarkedBooksDS: TIB_DataSource
+    Dataset = MarkedBooksQuery
+    Left = 272
+    Top = 16
+  end
+  object MarkedBooksQuery: TIB_Query
+    DatabaseName = 'BOOKS'
+    FieldsDisplayWidth.Strings = (
+      'PRINT=30'
+      'RECNO=60'
+      'DATE_ACQ=80'
+      'VOLUME=40'
+      'EDITION=60'
+      'OYEAR=60'
+      'PRICE=80'
+      'YEAR_PUBL=60'
+      'ISBN=80'
+      'REF=50'
+      'BOOKID=50')
+    FieldsReadOnly.Strings = (
+      'BOOKID=TRUE')
+    FieldsVisible.Strings = (
+      'BOOKCODE=FALSE'
+      'BOOKID=TRUE')
+    IB_Connection = BooksConnection
+    SQL.Strings = (
+      'SELECT *'
+      'FROM BOOKS'
+      'WHERE MARKER = '#39'S'#39)
+    DeleteSQL.Strings = (
+      'DELETE FROM BOOKS BOOKS'
+      'WHERE'
+      '   BOOKID = :OLD_BOOKID')
+    EditSQL.Strings = (
+      'UPDATE BOOKS BOOKS SET'
+      '   BOOKS.BOOKCODE = :BOOKCODE,'
+      '   BOOKS.AUTHOR = :AUTHOR,'
+      '   BOOKS.TITLE = :TITLE,'
+      '   BOOKS.ORIGTITLE = :ORIGTITLE,'
+      '   BOOKS.VOLUME = :VOLUME,'
+      '   BOOKS.EDITION = :EDITION,'
+      '   BOOKS.PUBLISHER = :PUBLISHER,'
+      '   BOOKS.PLACE = :PLACE,'
+      '   BOOKS.YEAR_PUBL = :YEAR_PUBL,'
+      '   BOOKS.OPUBLISHER = :OPUBLISHER,'
+      '   BOOKS.OPLACE = :OPLACE,'
+      '   BOOKS.OYEAR = :OYEAR,'
+      '   BOOKS.DATE_ACQ = :DATE_ACQ,'
+      '   BOOKS.PRICE = :PRICE,'
+      '   BOOKS.REF = :REF,'
+      '   BOOKS.SUBJECT = :SUBJECT,'
+      '   BOOKS.ISBN = :ISBN,'
+      '   BOOKS.PRINT = :PRINT,'
+      '   BOOKS.NOTES = :NOTES'
+      'WHERE'
+      '   BOOKID = :OLD_BOOKID')
+    GeneratorLinks.Strings = (
+      'BOOKS.BOOKID=BOOKID_NO')
+    InsertSQL.Strings = (
+      'INSERT INTO BOOKS('
+      '   BOOKCODE,'
+      '   AUTHOR,'
+      '   TITLE,'
+      '   ORIGTITLE,'
+      '   VOLUME,'
+      '   EDITION,'
+      '   PUBLISHER,'
+      '   PLACE,'
+      '   YEAR_PUBL,'
+      '   OPUBLISHER,'
+      '   OPLACE,'
+      '   OYEAR,'
+      '   DATE_ACQ,'
+      '   PRICE,'
+      '   REF,'
+      '   SUBJECT,'
+      '   ISBN,'
+      '   PRINT,'
+      '   NOTES)'
+      'VALUES ('
+      '   :BOOKCODE,'
+      '   :AUTHOR,'
+      '   :TITLE,'
+      '   :ORIGTITLE,'
+      '   :VOLUME,'
+      '   :EDITION,'
+      '   :PUBLISHER,'
+      '   :PLACE,'
+      '   :YEAR_PUBL,'
+      '   :OPUBLISHER,'
+      '   :OPLACE,'
+      '   :OYEAR,'
+      '   :DATE_ACQ,'
+      '   :PRICE,'
+      '   :REF,'
+      '   :SUBJECT,'
+      '   :ISBN,'
+      '   :PRINT,'
+      '   :NOTES)')
+    KeyLinks.Strings = (
+      'BOOKS.BOOKID')
+    OrderingItemNo = 5
+    OrderingItems.Strings = (
+      'BOOKCODE=BOOKCODE;BOOKCODE DESC'
+      'AUTHOR=AUTHOR;AUTHOR DESC'
+      'DATE_ACQ=DATE_ACQ;DATE_ACQ DESC'
+      'SUBJECT=SUBJECT;SUBJECT DESC'
+      'BOOKID=BOOKID;BOOKID DESC'
+      'REF=REF;REF DESC')
+    OrderingLinks.Strings = (
+      'BOOKCODE=ITEM=1'
+      'AUTHOR=ITEM=2'
+      'DATE_ACQ=ITEM=3'
+      'SUBJECT=ITEM=4'
+      'BOOKID=ITEM=5'
+      'REF=ITEM=6')
+    BeforePost = MarkedBooksQueryBeforePost
+    CommitAction = caRefresh
+    Left = 160
+    Top = 16
+  end
+  object BooksTransaction: TIB_Transaction
+    IB_Connection = BooksConnection
+    Isolation = tiCommitted
+    Left = 40
+    Top = 80
+  end
+  object BookRefsQuery: TIB_Query
+    DatabaseName = 'BOOKS'
+    IB_Connection = BooksConnection
+    Left = 152
+    Top = 80
+  end
+  object BookRefsDS: TIB_DataSource
+    Dataset = MarkedBooksQuery
+    Left = 272
+    Top = 80
+  end
+  object BookDSQL: TIB_DSQL
+    Left = 48
+    Top = 144
+  end
+end

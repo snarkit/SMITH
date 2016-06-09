@@ -1,0 +1,187 @@
+unit Refs;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, Grids, IB_Access, BookConcepts, Books,
+  DBGrids, Mask, ExtCtrls, DB, IBODataSet, IB_Grid, IB_Controls, IB_EditButton,
+  IB_Components, OrganismEdit;
+
+type
+  TBookRefsForm = class(TForm)
+    TypeLabel: TLabel;
+    DispBookCode: TLabel;
+    CloseButton: TButton;
+    Label3: TLabel;
+    JumpEdit: TEdit;
+    JumpButton: TButton;
+    RefsGrid: TIB_Grid;
+    EditRefNotes: TIB_Memo;
+    EditPanel: TPanel;
+    Orgcode: TIB_Edit;
+    Label1: TLabel;
+    DBPage: TIB_Edit;
+    Label6: TLabel;
+    DBVolume: TIB_Edit;
+    Label2: TLabel;
+    Button1: TButton;
+    CancelRefButton: TButton;
+    NewRefButton: TButton;
+    EditRefButton: TButton;
+    DeleteRefButton: TButton;
+    RefDataSource: TIB_DataSource;
+    Label4: TLabel;
+    DBRefcode: TIB_Edit;
+    ChangeBookButton: TButton;
+    procedure SaveRefButtonClick(Sender: TObject);
+    procedure NewRefButtonClick(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure CloseButtonClick(Sender: TObject);
+    procedure JumpButtonClick(Sender: TObject);
+    procedure CancelRefButtonClick(Sender: TObject);
+    procedure EditRefButtonClick(Sender: TObject);
+    procedure DeleteRefButtonClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
+    procedure ChangeBookButtonClick(Sender: TObject);
+    procedure RefsGridDblClick(Sender: TObject);
+  private
+    procedure GetReferences;
+    { Déclarations privées }
+  public
+    CurrentBook:TBook;
+    CurrentBookUseCode:ansistring;
+    RefQuery: TIB_Query;
+  end;
+
+var
+  BookRefsForm: TBookRefsForm;
+
+
+implementation
+
+uses IMSMain;
+
+
+
+
+{$R *.dfm}
+
+
+
+procedure TBookRefsForm.CancelRefButtonClick(Sender: TObject);
+begin
+    if RefsGrid.DataSource.Dataset.Modified then
+     RefsGrid.DataSource.Dataset.Cancel;
+    EditPanel.Visible:=false;
+
+end;
+
+procedure TBookRefsForm.ChangeBookButtonClick(Sender: TObject);
+begin
+  GetReferences;
+end;
+
+procedure TBookRefsForm.CloseButtonClick(Sender: TObject);
+begin
+   if RefsGrid.DataSource.Dataset.Modified then
+      if MessageDlg('Save last edited record?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+        RefsGrid.DataSource.Dataset.Post;
+  Close;
+end;
+
+
+procedure TBookRefsForm.DeleteRefButtonClick(Sender: TObject);
+begin
+  if MessageDlg('Delete reference?',mtConfirmation,[mbYes,mbNo],0)=mrYes then
+  begin
+    RefsGrid.DataSource.Dataset.Delete;
+  end;
+end;
+
+procedure TBookRefsForm.EditRefButtonClick(Sender: TObject);
+begin
+    EditPanel.Visible:=true;
+    RefsGrid.DataSource.Dataset.Edit;
+end;
+
+procedure TBookRefsForm.FormActivate(Sender: TObject);
+begin
+    if CurrentBook.IsEmpty then     //new entry from top
+      CurrentBookUseCode:=BooksForm.BookUses.FindUseCode('Source');
+    GetReferences;
+end;
+
+procedure TBookRefsForm.FormCreate(Sender: TObject);
+begin
+  CurrentBook := TBook.Create;
+end;
+
+procedure TBookRefsForm.FormDestroy(Sender: TObject);
+begin
+  FreeAndNil(CurrentBook);
+end;
+
+procedure TBookRefsForm.GetReferences;
+begin
+      EditPanel.Visible:=false;
+      IMSHomeForm.PickABook(CurrentBookUseCode, CurrentBookUseCode, CurrentBook);
+      RefDataSource.Dataset:=RefQuery;   //data set might have changed
+      // find references
+      RefQuery.Close;
+      RefQuery.ParamByName('bookcode').Value := CurrentBook.Bookcode;
+      RefQuery.ParamByName('volume').Value := '%'+CurrentBook.Volume;
+      RefQuery.Prepare;
+      RefQuery.Open;
+      DispBookCode.Caption:=CurrentBook.bookcode;
+      RefsGrid.DataSource.Dataset.OrderingItemNo:=1; //
+end;
+
+procedure TBookRefsForm.JumpButtonClick(Sender: TObject);
+var FieldName:ansistring; JumpValue:variant;
+begin
+  If (JumpEdit.Text<>'') then
+  begin
+    if (RefsGrid.DataSource.Dataset.OrderingItemNo=1) then
+    begin
+      FieldName:='ORGCODE';
+      if StrToIntDef(JumpEdit.Text,9999)=9999 then JumpValue:=Uppercase(JumpEdit.Text);
+    end
+    else begin
+      FieldName:='PAGENO';
+      if StrToIntDef(JumpEdit.Text,9999)<9999 then
+      JumpValue:=StrToInt(JumpEdit.Text);
+    end;
+    RefsGrid.DataSource.DataSet.DisableControls;
+    if JumpValue<RefsGrid.DataSource.DataSet.FieldValues[FieldName] then
+      RefsGrid.DataSource.DataSet.First;
+    while not RefsGrid.DataSource.DataSet.EOF and (RefsGrid.DataSource.DataSet.FieldValues[FieldName]<JumpValue)
+        do RefsGrid.DataSource.DataSet.Next;
+    RefsGrid.DataSource.DataSet.EnableControls;
+  end;
+end;
+
+procedure TBookRefsForm.NewRefButtonClick(Sender: TObject);
+begin
+  RefsGrid.DataSource.Dataset.Append;
+  RefsGrid.DataSource.Dataset.FieldValues['BOOKCODE']:=currentBook.bookcode;
+  EditPanel.Visible:=true;
+end;
+
+procedure TBookRefsForm.RefsGridDblClick(Sender: TObject);
+begin
+    OrganismEditForm.CurrentOrg.OrgCode:=RefsGrid.DataSource.DataSet.FieldValues['OrgCode'];
+    OrganismEditForm.Mode:=OrgEditRefsMode;
+    OrganismEditForm.ShowModal;
+end;
+
+procedure TBookRefsForm.SaveRefButtonClick(Sender: TObject);
+begin
+    if RefsGrid.DataSource.Dataset.Modified then
+      RefsGrid.DataSource.Dataset.Post;
+    EditPanel.Visible:=false;
+end;
+
+
+end.

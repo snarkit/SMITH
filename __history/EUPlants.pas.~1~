@@ -1,0 +1,25 @@
+unit EUPlants;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, IB_Grid;
+
+type
+  TEUPlantsForm = class(TForm)
+    IB_Grid1: TIB_Grid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  EUPlantsForm: TEUPlantsForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

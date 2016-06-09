@@ -1,0 +1,26 @@
+object BooksDM: TBooksDM
+  OldCreateOrder = False
+  Height = 210
+  Width = 353
+  object BookConnection: TIB_Connection
+    SQLDialect = 3
+    Params.Strings = (
+      'SERVER=localhost'
+      'PATH=bookplates'
+      'USER NAME=SYSDBA'
+      'PROTOCOL=TCP/IP'
+      'SQL DIALECT=3'
+      'FORCED WRITES=TRUE'
+      'RESERVE PAGE SPACE=TRUE')
+    Left = 48
+    Top = 24
+  end
+  object BookCursor: TIB_Cursor
+    DatabaseName = 'localhost:bookplates'
+    IB_Connection = BookConnection
+    SQL.Strings = (
+      'select * from BOOKS ')
+    Left = 152
+    Top = 32
+  end
+end

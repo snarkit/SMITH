@@ -1,0 +1,39 @@
+object BooksDM: TBooksDM
+  OldCreateOrder = False
+  Height = 210
+  Width = 353
+  object BookConnection: TIB_Connection
+    PasswordStorage = psNotSecure
+    SQLDialect = 3
+    Params.Strings = (
+      'SERVER=localhost'
+      'PATH=bookplates'
+      'USER NAME=SYSDBA'
+      'PROTOCOL=TCP/IP'
+      'SQL DIALECT=3'
+      'FORCED WRITES=TRUE'
+      'RESERVE PAGE SPACE=TRUE')
+    Left = 48
+    Top = 24
+    SavedPassword = '.JuMbLe.01.432B0639073E0E4B49'
+  end
+  object BookCursor: TIB_Cursor
+    DatabaseName = 'localhost:bookplates'
+    IB_Connection = BookConnection
+    SQL.Strings = (
+      'select * from BOOKS ')
+    Left = 152
+    Top = 32
+  end
+  object MarkedBooksQuery: TIB_Query
+    DatabaseName = 'localhost:bookplates'
+    IB_Connection = BookConnection
+    Left = 152
+    Top = 112
+  end
+  object MarkedBooksDS: TIB_DataSource
+    Dataset = MarkedBooksQuery
+    Left = 224
+    Top = 112
+  end
+end

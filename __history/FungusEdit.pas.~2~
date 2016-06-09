@@ -1,0 +1,212 @@
+unit FungusEdit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, IB_Grid, ExtCtrls, BookConcepts;
+
+type
+  TBookEditForm = class(TForm)
+    CopyButton: TButton;
+    UpdateButton: TButton;
+    IgnoreButton: TButton;
+    ExistPanel: TPanel;
+    oldBookcode: TEdit;
+    oldshortcode: TEdit;
+    oldAuthor: TEdit;
+    oldTitle: TEdit;
+    oldVolume: TEdit;
+    oldEdition: TEdit;
+    oldPublisher: TEdit;
+    oldPlace: TEdit;
+    oldYearpub: TEdit;
+    oldOPlace: TEdit;
+    Panel2: TPanel;
+    IMSBookcode: TEdit;
+    IMSshortcode: TEdit;
+    IMSAuthor: TEdit;
+    IMSTitle: TEdit;
+    IMSVolume: TEdit;
+    IMSEdition: TEdit;
+    IMSPublisher: TEdit;
+    IMSPlace: TEdit;
+    IMSYearpub: TEdit;
+    IMSOPublisher: TEdit;
+    IMSOPlace: TEdit;
+    IMSPrice: TEdit;
+    IMSRef: TEdit;
+    IMSOYear: TEdit;
+    IMSISBN: TEdit;
+    IMSSubject: TEdit;
+    IMSDateAcq: TEdit;
+    IMSNbPages: TEdit;
+    IMSUsedBy: TEdit;
+    IMSNotes: TMemo;
+    oldPrice: TEdit;
+    oldRef: TEdit;
+    oldOYear: TEdit;
+    oldISBN: TEdit;
+    oldSubject: TEdit;
+    oldDateAcq: TEdit;
+    oldNbPages: TEdit;
+    oldUsedBy: TEdit;
+    oldNotes: TMemo;
+    OldBookPlateStatus: TEdit;
+    IMSBookPLateStatus: TEdit;
+    DifferenceList: TListBox;
+    Label2: TLabel;
+    AbortButton: TButton;
+    oldOPublisher: TEdit;
+    Panel3: TPanel;
+    bookcodelabel: TLabel;
+    shortcodelabel: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label18: TLabel;
+    Label19: TLabel;
+    Label20: TLabel;
+    Label14: TLabel;
+    Label1: TLabel;
+    Label15: TLabel;
+    Label21: TLabel;
+    recct: TLabel;
+    procedure oldBookChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure IMSBookcodeChange(Sender: TObject);
+    procedure AbortButtonClick(Sender: TObject);
+    procedure BookPlateCopyButtonClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BookEditForm: TBookEditForm;
+
+implementation
+
+uses BooksTransfer;
+
+
+{$R *.dfm}
+
+procedure TBookEditForm.AbortButtonClick(Sender: TObject);
+begin
+     FungiTransferForm.Interrupt:=True;
+     modalresult:=mrIgnore;
+end;
+
+procedure TBookEditForm.BookPlateCopyButtonClick(Sender: TObject);
+begin
+   FungiTransferForm.CurrentOldBook.BookPlateStatus:=FungiTransferForm.CurrentIMSBook.BookPlateStatus;
+end;
+
+procedure TBookEditForm.FormActivate(Sender: TObject);
+begin
+        oldbookcode.Text:=FungiTransferForm.CurrentOldBook.bookcode;
+        oldshortcode.Text:=FungiTransferForm.CurrentOldBook.shortcode;
+        oldAuthor.Text:=FungiTransferForm.CurrentOldBook.Author;
+        oldTitle.Text:=FungiTransferForm.CurrentOldBook.Title;
+        oldVolume.Text:=FungiTransferForm.CurrentOldBook.Volume;
+        oldEdition.Text:=FungiTransferForm.CurrentOldBook.Edition;
+        oldPublisher.Text:=FungiTransferForm.CurrentOldBook.Publisher;
+        oldPlace.Text:=FungiTransferForm.CurrentOldBook.Place;
+        oldYearPub.Text:=FungiTransferForm.CurrentOldBook.YearPub;
+        oldOPublisher.Text:=FungiTransferForm.CurrentOldBook.OPublisher;
+        oldOPlace.Text:=FungiTransferForm.CurrentOldBook.OPlace;
+        oldOYear.Text:=FungiTransferForm.CurrentOldBook.OYear;
+        oldISBN.Text:=FungiTransferForm.CurrentOldBook.ISBN;
+        oldSubject.Text:=FungiTransferForm.CurrentOldBook.Subject;
+        oldDateAcq.Text:=FungiTransferForm.CurrentOldBook.DateAcquired;
+        oldPrice.Text:=IntToStr(FungiTransferForm.CurrentOldBook.Price);
+        oldRef.Text:=FungiTransferForm.CurrentOldBook.Ref;
+        oldUsedBy.Text:=FungiTransferForm.CurrentOldBook.UsedByAsAnsiStr;
+        oldBookPlateStatus.Text:=FungiTransferForm.CurrentOldBook.BookPlateStatus;
+        oldnbpages.Text:=IntToStr(FungiTransferForm.CurrentOldBook.NumberOfPages);
+        oldnotes.Text:=FungiTransferForm.CurrentOldBook.notes;
+        IMSbookcode.Text:=FungiTransferForm.CurrentIMSBook.bookcode;
+        IMSAuthor.Text:=FungiTransferForm.CurrentIMSBook.Author;
+        IMSTitle.Text:=FungiTransferForm.CurrentIMSBook.Title;
+        IMSVolume.Text:=FungiTransferForm.CurrentIMSBook.Volume;
+        IMSEdition.Text:=FungiTransferForm.CurrentIMSBook.Edition;
+        IMSPublisher.Text:=FungiTransferForm.CurrentIMSBook.Publisher;
+        IMSPlace.Text:=FungiTransferForm.CurrentIMSBook.Place;
+        IMSYearPub.Text:=FungiTransferForm.CurrentIMSBook.YearPub;
+        IMSOPublisher.Text:=FungiTransferForm.CurrentIMSBook.OPublisher;
+        IMSOPlace.Text:=FungiTransferForm.CurrentIMSBook.OPlace;
+        IMSOYear.Text:=FungiTransferForm.CurrentIMSBook.OYear;
+        IMSISBN.Text:=FungiTransferForm.CurrentIMSBook.ISBN;
+        IMSSubject.Text:=FungiTransferForm.CurrentIMSBook.Subject;
+        IMSDateAcq.Text:=FungiTransferForm.CurrentIMSBook.DateAcquired;
+        IMSPrice.Text:=IntToStr(FungiTransferForm.CurrentIMSBook.Price);
+        IMSRef.Text:=FungiTransferForm.CurrentIMSBook.Ref;
+        IMSUsedBy.Text:=FungiTransferForm.CurrentIMSBook.UsedByAsAnsiStr;
+        IMSBookPlateStatus.Text:=FungiTransferForm.CurrentIMSBook.BookPlateStatus;
+        IMSnbpages.Text:=IntToStr(FungiTransferForm.CurrentIMSBook.NumberOfPages);
+        IMSnotes.Text:=FungiTransferForm.CurrentIMSBook.notes;
+end;
+
+procedure TBookEditForm.IMSBookcodeChange(Sender: TObject);
+begin
+  if sender=IMSbookcode then FungiTransferForm.CurrentIMSBook.bookcode:=IMSbookcode.Text;
+  if sender=IMSshortcode then FungiTransferForm.CurrentIMSBook.shortcode:=IMSshortcode.Text;
+  if sender=IMSAuthor then FungiTransferForm.CurrentIMSFind.Author:=IMSAuthor.Text;
+  if sender=IMSTitle then FungiTransferForm.CurrentIMSBook.Title:=IMSTitle.Text;
+  if sender=IMSVolume then FungiTransferForm.CurrentIMSBook.Volume:=IMSVolume.Text;
+  if sender=IMSEdition then FungiTransferForm.CurrentIMSBook.Edition:=IMSEdition.Text;
+  if sender=IMSPublisher then FungiTransferForm.CurrentIMSBook.Publisher:=IMSPublisher.Text;
+  if sender=IMSplace then FungiTransferForm.CurrentIMSBook.place:=IMSplace.Text;
+  if sender=IMSYearPub then FungiTransferForm.CurrentIMSBook.YearPub:=IMSYearPub.Text;
+  if sender=IMSOPublisher then FungiTransferForm.CurrentIMSBook.OPublisher:=IMSOPublisher.Text;
+  if sender=IMSOPlace then FungiTransferForm.CurrentIMSBook.OPlace:=IMSOPlace.Text;
+  if sender=IMSOYear then FungiTransferForm.CurrentIMSBook.OYear:=IMSOYear.Text;
+  if sender=IMSISBN then FungiTransferForm.CurrentIMSBook.ISBN:=IMSISBN.Text;
+  if sender=IMSSubject then FungiTransferForm.CurrentIMSBook.Subject:=IMSSubject.Text;
+  if sender=IMSDateAcq then FungiTransferForm.CurrentIMSBook.DateAcquired:=IMSDateAcq.Text;
+  if sender=IMSPrice then FungiTransferForm.CurrentIMSBook.Price:=StrToInt(IMSPrice.Text);
+  if sender=IMSRef then FungiTransferForm.CurrentIMSBook.Ref:=IMSRef.Text;
+  if sender=IMSUsedBy then FungiTransferForm.CurrentIMSBook.SetUses(IMSUsedBy.Text);
+  if sender=IMSBookPlateStatus then FungiTransferForm.CurrentIMSBook.BookPlateStatus:=IMSBookPlateStatus.Text;
+  if sender=IMSnbpages then FungiTransferForm.CurrentIMSBook.NumberOfPages:=StrToInt(IMSnbpages.Text);
+  if sender=IMSnotes then FungiTransferForm.CurrentIMSBook.notes:=IMSnotes.Text;
+end;
+
+procedure TBookEditForm.oldBookChange(Sender: TObject);
+begin
+  if sender=oldbookcode then FungiTransferForm.CurrentOldBook.bookcode:=oldbookcode.Text;
+  if sender=oldshortcode then FungiTransferForm.CurrentOldBook.shortcode:=oldshortcode.Text;
+  if sender=oldAuthor then FungiTransferForm.CurrentOldBook.Author:=oldAuthor.Text;
+  if sender=oldTitle then FungiTransferForm.CurrentOldBook.Title:=oldTitle.Text;
+  if sender=oldVolume then FungiTransferForm.CurrentOldBook.Volume:=oldVolume.Text;
+  if sender=oldEdition then FungiTransferForm.CurrentOldBook.Edition:=oldEdition.Text;
+  if sender=oldPublisher then FungiTransferForm.CurrentOldBook.Publisher:=oldPublisher.Text;
+  if sender=oldplace then FungiTransferForm.CurrentOldBook.place:=oldplace.Text;
+  if sender=oldYearPub then FungiTransferForm.CurrentOldBook.YearPub:=oldYearPub.Text;
+  if sender=oldOPublisher then FungiTransferForm.CurrentOldBook.OPublisher:=oldOPublisher.Text;
+  if sender=oldOPlace then FungiTransferForm.CurrentOldBook.OPlace:=oldOPlace.Text;
+  if sender=oldOYear then FungiTransferForm.CurrentOldBook.OYear:=oldOYear.Text;
+  if sender=oldISBN then FungiTransferForm.CurrentOldBook.ISBN:=oldISBN.Text;
+  if sender=oldSubject then FungiTransferForm.CurrentOldBook.Subject:=oldSubject.Text;
+  if sender=oldDateAcq then FungiTransferForm.CurrentOldBook.DateAcquired:=oldDateAcq.Text;
+  if sender=oldPrice then FungiTransferForm.CurrentOldBook.Price:=StrToInt(oldPrice.Text);
+  if sender=oldRef then FungiTransferForm.CurrentOldBook.Ref:=oldRef.Text;
+  if sender=oldUsedBy then FungiTransferForm.CurrentOldBook.SetUses(oldUsedBy.Text);
+  if sender=oldBookPlateStatus then FungiTransferForm.CurrentOldBook.BookPlateStatus:=oldBookPlateStatus.Text;
+  if sender=oldnbpages then FungiTransferForm.CurrentOldBook.NumberOfPages:=StrToInt(oldnbpages.Text);
+  if sender=oldnotes then FungiTransferForm.CurrentOldBook.notes:=oldnotes.Text;
+end;
+
+end.

@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2012/04/25 14:52:41.027.pas,C:\Users\Clare\Documents\RAD Studio\Projets\Common\Unit1.pas=C:\Users\Clare\Documents\RAD Studio\Projets\Common\DataExtractor.pas</Transaction>
+    <Transaction>2012/04/25 14:52:41.028.dfm,C:\Users\Clare\Documents\RAD Studio\Projets\Common\Unit1.dfm=C:\Users\Clare\Documents\RAD Studio\Projets\Common\DataExtractor.dfm</Transaction>
+    <Transaction>2012/04/25 14:53:01.607.dproj,C:\Users\Clare\Documents\RAD Studio\Projets\Common\Project1.dproj=C:\Users\Clare\Documents\RAD Studio\Projets\Common\DatabaseExtract.dproj</Transaction>
+  </Transactions>
+</BorlandProject>

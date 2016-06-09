@@ -1,0 +1,26 @@
+unit OrganismData;
+
+interface
+
+uses
+  SysUtils, Classes, IB_Components, IB_Access;
+
+type
+  TOrganismDM = class(TDataModule)
+    AllOrgsWithNames: TIB_Query;
+    AllOrgsDS: TIB_DataSource;
+    OrganismConnection: TIB_Connection;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  OrganismDM: TOrganismDM;
+
+implementation
+
+{$R *.dfm}
+
+end.

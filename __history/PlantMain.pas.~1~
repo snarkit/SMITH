@@ -1,0 +1,24 @@
+unit PlantMain;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs;
+
+type
+  TPlantMainForm = class(TForm)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  PlantMainForm: TPlantMainForm;
+
+implementation
+
+{$R *.dfm}
+
+end.

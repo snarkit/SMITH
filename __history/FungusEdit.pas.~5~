@@ -1,0 +1,136 @@
+unit FungusEdit;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, IB_Grid, ExtCtrls, ForayConcepts;
+
+type
+  TForayEditForm = class(TForm)
+    CopyButton: TButton;
+    UpdateButton: TButton;
+    IgnoreButton: TButton;
+    ExistPanel: TPanel;
+    oldforaycode: TEdit;
+    oldshortcode: TEdit;
+    oldAuthor: TEdit;
+    oldTitle: TEdit;
+    oldVolume: TEdit;
+    Panel2: TPanel;
+    IMSforaycode: TEdit;
+    IMSshortcode: TEdit;
+    IMSAuthor: TEdit;
+    IMSTitle: TEdit;
+    IMSVolume: TEdit;
+    IMSEdition: TEdit;
+    IMSNotes: TMemo;
+    oldNotes: TMemo;
+    OldForayPlateStatus: TEdit;
+    DifferenceList: TListBox;
+    Label2: TLabel;
+    AbortButton: TButton;
+    Panel3: TPanel;
+    foraycodelabel: TLabel;
+    shortcodelabel: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label15: TLabel;
+    Label21: TLabel;
+    recct: TLabel;
+    procedure oldForayChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+    procedure IMSforaycodeChange(Sender: TObject);
+    procedure AbortButtonClick(Sender: TObject);
+    procedure ForayPlateCopyButtonClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ForayEditForm: TForayEditForm;
+
+implementation
+
+uses FungiTransfer;
+
+
+{$R *.dfm}
+
+procedure TForayEditForm.AbortButtonClick(Sender: TObject);
+begin
+     FungiTransferForm.Interrupt:=True;
+     modalresult:=mrIgnore;
+end;
+
+
+procedure TForayEditForm.FormActivate(Sender: TObject);
+begin
+        oldforaycode.Text:=FungiTransferForm.CurrentOldForay.foraycode;
+        oldforayname.Text:=FungiTransferForm.CurrentOldForay.forayname;
+        oldforaycountry.Text:=FungiTransferForm.CurrentOldForay.foraycountry;
+        oldforayplace.Text:=FungiTransferForm.CurrentOldForay.forayplace;
+        oldforaydate.Text:=FungiTransferForm.CurrentOldForay.foraydate;
+        oldnotes.Text:=FungiTransferForm.CurrentOldForay.notes;
+        IMSforaycode.Text:=FungiTransferForm.CurrentIMSForay.foraycode;
+        IMSforayname.Text:=FungiTransferForm.CurrentIMSForay.forayname;
+        IMSforaycountry.Text:=FungiTransferForm.CurrentIMSForay.foraycountry;
+        IMSforayplace.Text:=FungiTransferForm.CurrentIMSForay.forayplace;
+        IMSforaydate.Text:=FungiTransferForm.CurrentIMSForay.foraydate;
+        IMSnotes.Text:=FungiTransferForm.CurrentIMSForay.notes;
+end;
+
+procedure TForayEditForm.IMSforaycodeChange(Sender: TObject);
+begin
+  if sender=IMSforaycode then FungiTransferForm.CurrentIMSForay.foraycode:=IMSforaycode.Text;
+  if sender=IMSshortcode then FungiTransferForm.CurrentIMSForay.shortcode:=IMSshortcode.Text;
+  if sender=IMSAuthor then FungiTransferForm.CurrentIMSFind.Author:=IMSAuthor.Text;
+  if sender=IMSTitle then FungiTransferForm.CurrentIMSForay.Title:=IMSTitle.Text;
+  if sender=IMSVolume then FungiTransferForm.CurrentIMSForay.Volume:=IMSVolume.Text;
+  if sender=IMSEdition then FungiTransferForm.CurrentIMSForay.Edition:=IMSEdition.Text;
+  if sender=IMSPublisher then FungiTransferForm.CurrentIMSForay.Publisher:=IMSPublisher.Text;
+  if sender=IMSplace then FungiTransferForm.CurrentIMSForay.place:=IMSplace.Text;
+  if sender=IMSYearPub then FungiTransferForm.CurrentIMSForay.YearPub:=IMSYearPub.Text;
+  if sender=IMSOPublisher then FungiTransferForm.CurrentIMSForay.OPublisher:=IMSOPublisher.Text;
+  if sender=IMSOPlace then FungiTransferForm.CurrentIMSForay.OPlace:=IMSOPlace.Text;
+  if sender=IMSOYear then FungiTransferForm.CurrentIMSForay.OYear:=IMSOYear.Text;
+  if sender=IMSISBN then FungiTransferForm.CurrentIMSForay.ISBN:=IMSISBN.Text;
+  if sender=IMSSubject then FungiTransferForm.CurrentIMSForay.Subject:=IMSSubject.Text;
+  if sender=IMSDateAcq then FungiTransferForm.CurrentIMSForay.DateAcquired:=IMSDateAcq.Text;
+  if sender=IMSPrice then FungiTransferForm.CurrentIMSForay.Price:=StrToInt(IMSPrice.Text);
+  if sender=IMSRef then FungiTransferForm.CurrentIMSForay.Ref:=IMSRef.Text;
+  if sender=IMSUsedBy then FungiTransferForm.CurrentIMSForay.SetUses(IMSUsedBy.Text);
+  if sender=IMSForayPlateStatus then FungiTransferForm.CurrentIMSForay.ForayPlateStatus:=IMSForayPlateStatus.Text;
+  if sender=IMSnbpages then FungiTransferForm.CurrentIMSForay.NumberOfPages:=StrToInt(IMSnbpages.Text);
+  if sender=IMSnotes then FungiTransferForm.CurrentIMSForay.notes:=IMSnotes.Text;
+end;
+
+procedure TForayEditForm.oldForayChange(Sender: TObject);
+begin
+  if sender=oldforaycode then FungiTransferForm.CurrentOldForay.foraycode:=oldforaycode.Text;
+  if sender=oldshortcode then FungiTransferForm.CurrentOldForay.shortcode:=oldshortcode.Text;
+  if sender=oldAuthor then FungiTransferForm.CurrentOldForay.Author:=oldAuthor.Text;
+  if sender=oldTitle then FungiTransferForm.CurrentOldForay.Title:=oldTitle.Text;
+  if sender=oldVolume then FungiTransferForm.CurrentOldForay.Volume:=oldVolume.Text;
+  if sender=oldEdition then FungiTransferForm.CurrentOldForay.Edition:=oldEdition.Text;
+  if sender=oldPublisher then FungiTransferForm.CurrentOldForay.Publisher:=oldPublisher.Text;
+  if sender=oldplace then FungiTransferForm.CurrentOldForay.place:=oldplace.Text;
+  if sender=oldYearPub then FungiTransferForm.CurrentOldForay.YearPub:=oldYearPub.Text;
+  if sender=oldOPublisher then FungiTransferForm.CurrentOldForay.OPublisher:=oldOPublisher.Text;
+  if sender=oldOPlace then FungiTransferForm.CurrentOldForay.OPlace:=oldOPlace.Text;
+  if sender=oldOYear then FungiTransferForm.CurrentOldForay.OYear:=oldOYear.Text;
+  if sender=oldISBN then FungiTransferForm.CurrentOldForay.ISBN:=oldISBN.Text;
+  if sender=oldSubject then FungiTransferForm.CurrentOldForay.Subject:=oldSubject.Text;
+  if sender=oldDateAcq then FungiTransferForm.CurrentOldForay.DateAcquired:=oldDateAcq.Text;
+  if sender=oldPrice then FungiTransferForm.CurrentOldForay.Price:=StrToInt(oldPrice.Text);
+  if sender=oldRef then FungiTransferForm.CurrentOldForay.Ref:=oldRef.Text;
+  if sender=oldUsedBy then FungiTransferForm.CurrentOldForay.SetUses(oldUsedBy.Text);
+  if sender=oldForayPlateStatus then FungiTransferForm.CurrentOldForay.ForayPlateStatus:=oldForayPlateStatus.Text;
+  if sender=oldnbpages then FungiTransferForm.CurrentOldForay.NumberOfPages:=StrToInt(oldnbpages.Text);
+  if sender=oldnotes then FungiTransferForm.CurrentOldForay.notes:=oldnotes.Text;
+end;
+
+end.

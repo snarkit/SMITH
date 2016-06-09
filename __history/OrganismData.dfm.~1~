@@ -1,0 +1,60 @@
+object OrganismDM: TOrganismDM
+  OldCreateOrder = False
+  Height = 174
+  Width = 243
+  object AllOrgsWithNames: TIB_Query
+    DatabaseName = 'Fungi'
+    FieldsCharCase.Strings = (
+      'O.ORGCODE=UPPER')
+    FieldsDisplayWidth.Strings = (
+      'O.ORGCODE=118'
+      'O.IMS=24'
+      'O.COMMENTS=0'
+      'O.CARD=0')
+    IB_Connection = OrganismConnection
+    SQL.Strings = (
+      'SELECT O.ORGCODE'
+      '     , O.COMMENTS'
+      '     , O.CARD'
+      '     , N.NAME'
+      'FROM ORGNAMES N'
+      'INNER JOIN ORGANISMS O'
+      'ON O.ORGCODE=N.ORGCODE'
+      'where N.LANGUAGE='#39'A'#39
+      'AND N.LN=0'
+      'ORDER BY O.ORGCODE')
+    AutoFetchAll = True
+    JoinLinks.Strings = (
+      'O.ORGCODE=N.ORGCODE')
+    OrderingItems.Strings = (
+      'O.ORGCODE=O.ORGCODE;O.ORGCODE DESC'
+      'N.NAME=N.NAME;N.NAME DESC')
+    OrderingLinks.Strings = (
+      'O.ORGCODE=ITEM=1'
+      'N.NAME=ITEM=2')
+    Left = 48
+    Top = 56
+  end
+  object AllOrgsDS: TIB_DataSource
+    AutoEdit = False
+    AutoInsert = False
+    Dataset = AllOrgsWithNames
+    Left = 128
+    Top = 56
+  end
+  object OrganismConnection: TIB_Connection
+    PasswordStorage = psNotSecure
+    SQLDialect = 3
+    Params.Strings = (
+      'CHARACTER SET=UTF8'
+      'PATH=Fungi'
+      'USER NAME=SYSDBA'
+      'SQL DIALECT=3'
+      'SERVER=localhost'
+      'FORCED WRITES=TRUE'
+      'RESERVE PAGE SPACE=TRUE')
+    Left = 32
+    Top = 12
+    SavedPassword = '.JuMbLe.01.432B0639073E0E4B49'
+  end
+end

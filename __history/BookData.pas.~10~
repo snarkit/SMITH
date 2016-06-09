@@ -1,0 +1,58 @@
+unit BookData;
+
+interface
+
+uses
+  SysUtils, Classes, IB_Components, IB_Access, BookConcepts, Dialogs;
+
+type
+  TBooksDM = class(TDataModule)
+    BooksConnection: TIB_Connection;
+    MarkedBooksDS: TIB_DataSource;
+    MarkedBooksQuery: TIB_Query;
+    BooksTransaction: TIB_Transaction;
+    BookRefsQuery: TIB_Query;
+    BookRefsDS: TIB_DataSource;
+    BookDSQL: TIB_DSQL;
+    procedure MarkedBooksQueryBeforePost(IB_Dataset: TIB_Dataset);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function IsBook(book:string):boolean;
+  end;
+
+var
+  BooksDM: TBooksDM; CurrentBook:Book;
+
+implementation
+
+{$R *.dfm}
+
+procedure TBooksDM.MarkedBooksQueryBeforePost(IB_Dataset: TIB_Dataset);
+begin
+ if (IB_DataSet.FieldByName('PageNo').Value<1) or (IB_DataSet.FieldByName('PageNo').Value>
+    CurrentBook.NumberOfPages)
+ then begin
+      MessageDlg('Page number outside range of book',mtError, [mbOK], 0);
+      IB_DataSet.FieldByName('PAGENO').Clear;
+      Abort;
+ end;
+end;
+
+function TBooksDM.IsBook(book:string):boolean;
+begin
+    result:=false;
+    with BookDSQL do            //make sure book exists
+    begin
+      begin
+        SQL.Clear;
+        SQL.Add('Select * from books where bookcode='+quotedstr(book));
+        Execute;
+        if not eof then result:=true;
+      end;
+    end;
+end;
+
+
+end.

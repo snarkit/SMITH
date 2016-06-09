@@ -1,0 +1,52 @@
+unit OrganismData;
+
+interface
+
+uses
+  SysUtils, Classes, IB_Components, IB_Access;
+
+type
+  TOrganismDM = class(TDataModule)
+    AllOrgsWithNames: TIB_Query;
+    AllOrgsDS: TIB_DataSource;
+    OrganismConnection: TIB_Connection;
+    OrgByCodeQuery: TIB_Query;
+    OrgByCodeDS: TIB_DataSource;
+    NamesForOrgDS: TIB_DataSource;
+    NamesForOrgQuery: TIB_Query;
+  private
+    { Private declarations }
+  public
+    procedure GetOrg(eppocode:ansistring);
+    procedure GetNamesForOrg(eppocode:ansistring);
+    { Public declarations }
+  end;
+
+var
+  OrganismDM: TOrganismDM;
+
+implementation
+
+{$R *.dfm}
+
+procedure TOrganismDM.GetOrg(eppocode:ansistring);
+begin
+  with OrgByCodeQuery do
+  begin
+    ParamByName('ORGCODE').value:=eppocode;
+    prepare;
+    open;
+  end;
+end;
+
+procedure TOrganismDM.GetNamesForOrg(eppocode:ansistring);
+begin
+  with NamesForOrgQuery do
+  begin
+    ParamByName('ORGCODE').value:=eppocode;
+    prepare;
+    open;
+  end;
+end;
+
+end.

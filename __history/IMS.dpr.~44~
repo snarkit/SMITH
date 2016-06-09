@@ -1,0 +1,49 @@
+program IMS;
+
+
+
+
+
+uses
+  Forms,
+  IMSMain in 'IMSMain.pas' {iMSHomeForm},
+  Books in 'Books.pas' {BooksForm},
+  JPEMain in '..\JPD\JPEMain.pas' {JPEditorForm},
+  BPPrint in 'BPPrint.pas' {BPPrintForm},
+  Forays in '..\Fungi\Forays.pas' {ForayForm},
+  BookConcepts in 'BookConcepts.pas',
+  IMSData in 'IMSData.pas' {IMSDM: TDataModule},
+  OrganismConcepts in 'OrganismConcepts.pas',
+  OrganismSelect in 'OrganismSelect.pas' {OrganismSelectForm},
+  OrgNameReview in 'OrgNameReview.pas' {OrgNameReviewForm},
+  EUPlants in 'EUPlants.pas' {EUPlantsForm},
+  PlantCardEditor in 'PlantCardEditor.pas' {PlantCardEditForm},
+  ForayConcepts in 'ForayConcepts.pas',
+  ueppt in 'ueppt.pas',
+  OrgNameSelect in 'OrgNameSelect.pas' {OrgNameSelectForm},
+  Refs in 'Refs.pas' {BookRefsForm},
+  Finds in '..\Fungi\Finds.pas' {FindsForm},
+  OrganismEdit in 'OrganismEdit.pas' {OrganismEditForm};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.Title := 'SMITH - Test 1';
+  Application.CreateForm(TIMSHomeForm, IMSHomeForm);
+  Application.CreateForm(TBPPrintForm, BPPrintForm);
+  Application.CreateForm(TForayForm, ForayForm);
+  Application.CreateForm(TIMSDM, IMSDM);
+  Application.CreateForm(TBooksForm, BooksForm);
+  Application.CreateForm(TJPEditorForm, JPEditorForm);
+  Application.CreateForm(TOrganismSelectForm, OrganismSelectForm);
+  Application.CreateForm(TOrgNameReviewForm, OrgNameReviewForm);
+  Application.CreateForm(TEUPlantsForm, EUPlantsForm);
+  Application.CreateForm(TPlantCardEditForm, PlantCardEditForm);
+  Application.CreateForm(TOrgNameSelectForm, OrgNameSelectForm);
+  Application.CreateForm(TBookRefsForm, BookRefsForm);
+  Application.CreateForm(TFindsForm, FindsForm);
+  Application.CreateForm(TOrganismEditForm, OrganismEditForm);
+  Application.Run;
+end.

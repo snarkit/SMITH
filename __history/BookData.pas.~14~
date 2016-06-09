@@ -1,0 +1,25 @@
+unit BookData;
+
+interface
+
+uses
+  SysUtils, Classes, IB_Components, IB_Access, BookConcepts,
+  Dialogs, OrganismConcepts;
+
+type
+  TBooksDM = class(TDataModule)
+    procedure MarkedBooksQueryBeforePost(IB_Dataset: TIB_Dataset);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  BooksDM: TBooksDM; CurrentBook:Book;
+
+implementation
+
+{$R *.dfm}
+
+nd.

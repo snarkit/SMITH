@@ -1,0 +1,550 @@
+object AdminForm: TAdminForm
+  Left = 0
+  Top = 0
+  Caption = 'Administrative tasks'
+  ClientHeight = 408
+  ClientWidth = 824
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -13
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  PixelsPerInch = 120
+  TextHeight = 16
+  object ResultLabel: TLabel
+    Left = 311
+    Top = 341
+    Width = 173
+    Height = 24
+    Caption = 'Results shown here'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -20
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object PrefNamePanel: TPanel
+    Left = 8
+    Top = 8
+    Width = 249
+    Height = 265
+    Caption = 'Insert missing preferred names'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label2: TLabel
+      Left = 14
+      Top = 56
+      Width = 204
+      Height = 16
+      Caption = 'Organism table with missing names'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label3: TLabel
+      Left = 43
+      Top = 136
+      Width = 175
+      Height = 16
+      Caption = 'Name table to get names from'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object OrgFileName: TEdit
+      Left = 84
+      Top = 78
+      Width = 134
+      Height = 24
+      TabOrder = 0
+      Text = 'ORGS'
+    end
+    object NameFileName: TEdit
+      Left = 84
+      Top = 156
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'NAMES'
+    end
+    object PrefNameButton: TButton
+      Left = 84
+      Top = 212
+      Width = 75
+      Height = 25
+      Caption = 'Go'
+      TabOrder = 2
+      OnClick = PrefNameButtonClick
+    end
+  end
+  object MergeOrgsPanel: TPanel
+    Left = 142
+    Top = 105
+    Width = 243
+    Height = 265
+    Caption = 'Merge org tables'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label1: TLabel
+      Left = 14
+      Top = 56
+      Width = 188
+      Height = 16
+      Caption = 'Table to receive new lines (dest)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label4: TLabel
+      Left = 22
+      Top = 134
+      Width = 182
+      Height = 16
+      Caption = 'Table to get lines from (source)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object MergeOrgsButton: TButton
+      Left = 84
+      Top = 212
+      Width = 75
+      Height = 25
+      Caption = 'Merge'
+      TabOrder = 0
+      OnClick = MergeNamesButtonClick
+    end
+    object SourceOrgName: TEdit
+      Left = 84
+      Top = 156
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'ORGS2'
+    end
+    object DestOrgName: TEdit
+      Left = 84
+      Top = 78
+      Width = 134
+      Height = 24
+      TabOrder = 2
+      Text = 'ORGS'
+    end
+  end
+  object MergeNamesPanel: TPanel
+    Left = 278
+    Top = 8
+    Width = 243
+    Height = 265
+    Caption = 'Merge name tables'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label5: TLabel
+      Left = 14
+      Top = 56
+      Width = 188
+      Height = 16
+      Caption = 'Table to receive new lines (dest)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label6: TLabel
+      Left = 22
+      Top = 134
+      Width = 182
+      Height = 16
+      Caption = 'Table to get lines from (source)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object MergeNamesButton: TButton
+      Left = 84
+      Top = 212
+      Width = 75
+      Height = 25
+      Caption = 'Merge'
+      TabOrder = 0
+      OnClick = MergeNamesButtonClick
+    end
+    object SourceNamesName: TEdit
+      Left = 84
+      Top = 156
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'NAMES'
+    end
+    object DestNamesName: TEdit
+      Left = 84
+      Top = 78
+      Width = 134
+      Height = 24
+      TabOrder = 2
+      Text = 'NAMES'
+    end
+  end
+  object MergeRefsPanel: TPanel
+    Left = 527
+    Top = 8
+    Width = 243
+    Height = 265
+    Caption = 'Merge ref tables'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 3
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label7: TLabel
+      Left = 14
+      Top = 56
+      Width = 188
+      Height = 16
+      Caption = 'Table to receive new lines (dest)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label8: TLabel
+      Left = 22
+      Top = 134
+      Width = 182
+      Height = 16
+      Caption = 'Table to get lines from (source)'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object MergeRefsButton: TButton
+      Left = 84
+      Top = 212
+      Width = 75
+      Height = 25
+      Caption = 'Merge'
+      TabOrder = 0
+      OnClick = MergeRefsButtonClick
+    end
+    object SourceRefsName: TEdit
+      Left = 84
+      Top = 156
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'BOOKREFS'
+    end
+    object DestRefsName: TEdit
+      Left = 84
+      Top = 78
+      Width = 134
+      Height = 24
+      TabOrder = 2
+      Text = 'BOOKREFS'
+    end
+  end
+  object NameEditPanel: TPanel
+    Left = 527
+    Top = 63
+    Width = 289
+    Height = 307
+    Caption = 'Replace text in names'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 4
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label9: TLabel
+      Left = 14
+      Top = 56
+      Width = 211
+      Height = 16
+      Caption = 'Table containing names to transform'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object First: TLabel
+      Left = 14
+      Top = 112
+      Width = 106
+      Height = 16
+      Caption = 'Beginning of string'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object Label10: TLabel
+      Left = 17
+      Top = 159
+      Width = 95
+      Height = 16
+      Caption = 'String to replace'
+    end
+    object Label11: TLabel
+      Left = 25
+      Top = 210
+      Width = 99
+      Height = 16
+      Caption = 'Replacement text'
+    end
+    object ReplaceButton: TButton
+      Left = 95
+      Top = 254
+      Width = 75
+      Height = 25
+      Caption = 'Replace'
+      TabOrder = 0
+    end
+    object FirstString: TEdit
+      Left = 139
+      Top = 108
+      Width = 72
+      Height = 24
+      TabOrder = 1
+    end
+    object TransformNameTable: TEdit
+      Left = 84
+      Top = 78
+      Width = 134
+      Height = 24
+      TabOrder = 2
+      Text = 'NAMES'
+    end
+    object Edit1: TEdit
+      Left = 149
+      Top = 158
+      Width = 94
+      Height = 24
+      TabOrder = 3
+      Text = 'Edit1'
+    end
+    object ReplacementText: TEdit
+      Left = 147
+      Top = 207
+      Width = 86
+      Height = 24
+      TabOrder = 4
+      Text = 'ReplacementText'
+    end
+  end
+  object SplitJPNamesPanel: TPanel
+    Left = 527
+    Top = 48
+    Width = 235
+    Height = 167
+    Caption = 'Split Japanese names'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 5
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label13: TLabel
+      Left = 17
+      Top = 38
+      Width = 178
+      Height = 16
+      Caption = 'Table containing names to split'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object SplitButton: TButton
+      Left = 83
+      Top = 130
+      Width = 75
+      Height = 25
+      Caption = 'Split'
+      TabOrder = 0
+      OnClick = SplitButtonClick
+    end
+    object TargetNamesName: TEdit
+      Left = 55
+      Top = 70
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'NAMES'
+    end
+  end
+  object IB_LocateEdit1: TIB_LocateEdit
+    Left = 51
+    Top = 310
+    Width = 121
+    Height = 24
+  end
+  object JPUsesPanel: TPanel
+    Left = 527
+    Top = 171
+    Width = 235
+    Height = 167
+    Caption = 'Insert JP into uses for ors in JPORGS'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -13
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 7
+    VerticalAlignment = taAlignTop
+    Visible = False
+    object Label12: TLabel
+      Left = 0
+      Top = 38
+      Width = 217
+      Height = 16
+      Caption = 'Table containing organisms to change'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+    end
+    object JPUseButton: TButton
+      Left = 83
+      Top = 130
+      Width = 75
+      Height = 25
+      Caption = 'Insert uses'
+      TabOrder = 0
+      OnClick = JPUseButtonClick
+    end
+    object JPUsesFileName: TEdit
+      Left = 55
+      Top = 70
+      Width = 134
+      Height = 24
+      TabOrder = 1
+      Text = 'EUORGANISMS'
+    end
+  end
+  object BasicQuery: TIB_Query
+    DatabaseName = 'Platinum:IMSDB'
+    FieldsDisplayWidth.Strings = (
+      'N.PREFERRED=104')
+    IB_Connection = IMSDM.FBConnection
+    SQL.Strings = (
+      'select * from JPOrgs o'
+      'join JPNames n'
+      'on o.orgcode = n.orgcode'
+      'where (n.preferred<>0)'
+      'and (o.preferredname is null) ')
+    EditSQL.Strings = (
+      'UPDATE JPORGS O SET'
+      '   O.ORGCODE = :ORGCODE,'
+      '   O.FAMILY = :FAMILY,'
+      '   O.POLNO = :POLNO,'
+      '   O.DATEMODIFIED = :DATEMODIFIED,'
+      '   O.CARD = :CARD,'
+      '   O.COMMENTS = :COMMENTS,'
+      '   O.USEDBY = :USEDBY,'
+      '   O.PREFERREDNAME = :PREFERREDNAME'
+      'WHERE'
+      '   ORGID = :OLD_ORGID')
+    KeyLinksAutoDefine = False
+    RequestLive = True
+    Left = 151
+    Top = 27
+  end
+  object SecondQuery: TIB_Query
+    DatabaseName = 'Platinum:IMSDB'
+    FieldsDisplayWidth.Strings = (
+      'N.PREFERRED=104')
+    IB_Connection = IMSDM.FBConnection
+    SQL.Strings = (
+      'select * from JPOrgs o'
+      'join JPNames n'
+      'on o.orgcode = n.orgcode'
+      'where (n.preferred<>0)'
+      'and (o.preferredname is null) ')
+    EditSQL.Strings = (
+      'UPDATE JPORGS O SET'
+      '   O.ORGCODE = :ORGCODE,'
+      '   O.FAMILY = :FAMILY,'
+      '   O.POLNO = :POLNO,'
+      '   O.DATEMODIFIED = :DATEMODIFIED,'
+      '   O.CARD = :CARD,'
+      '   O.COMMENTS = :COMMENTS,'
+      '   O.USEDBY = :USEDBY,'
+      '   O.PREFERREDNAME = :PREFERREDNAME'
+      'WHERE'
+      '   ORGID = :OLD_ORGID')
+    RequestLive = True
+    Left = 216
+    Top = 26
+  end
+  object IB_FTS_Search1: TIB_FTS_Search
+    Left = 461
+    Top = 297
+  end
+end

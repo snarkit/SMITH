@@ -1,0 +1,18 @@
+program BookCopy;
+
+uses
+  Forms,
+  BooksTransfer in 'BooksTransfer.pas' {Form2},
+  IMSData in 'IMSData.pas' {IMSDM: TDataModule},
+  BookData in 'BookData.pas' {BooksDM: TDataModule};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TForm2, Form2);
+  Application.CreateForm(TIMSDM, IMSDM);
+  Application.CreateForm(TBooksDM, BooksDM);
+  Application.Run;
+end.

@@ -1,0 +1,23 @@
+unit ForayData;
+
+interface
+
+uses
+  SysUtils, Classes;
+
+type
+  TForayDM = class(TDataModule)
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  ForayDM: TForayDM;
+
+implementation
+
+{$R *.dfm}
+
+end.

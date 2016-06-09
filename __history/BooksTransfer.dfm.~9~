@@ -1,0 +1,69 @@
+object BooksTransferForm: TBooksTransferForm
+  Left = 0
+  Top = 0
+  Caption = 'Append bookplate books to IMS'
+  ClientHeight = 622
+  ClientWidth = 791
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -14
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 120
+  TextHeight = 17
+  object Label1: TLabel
+    Left = 696
+    Top = 112
+    Width = 51
+    Height = 34
+    Caption = 'Existing IMSDB'
+    WordWrap = True
+  end
+  object GoButton: TButton
+    Left = 21
+    Top = 21
+    Width = 98
+    Height = 33
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = 'Go'
+    TabOrder = 0
+    OnClick = GoButtonClick
+  end
+  object IB_Grid1: TIB_Grid
+    Left = 28
+    Top = 73
+    Width = 662
+    Height = 541
+    CustomGlyphsSupplied = []
+    DataSource = IMSDM.AllBooksDS
+    TabOrder = 1
+  end
+  object IB_NavigationBar1: TIB_NavigationBar
+    Left = 183
+    Top = 26
+    Width = 120
+    Height = 25
+    Ctl3D = False
+    ParentCtl3D = False
+    TabOrder = 2
+    DataSource = IMSDM.AllBooksDS
+    ReceiveFocus = False
+    CustomGlyphsSupplied = []
+  end
+  object UnProcessedCB: TCheckBox
+    Left = 369
+    Top = 28
+    Width = 193
+    Height = 17
+    Caption = 'Ignore already processed'
+    TabOrder = 3
+  end
+end
